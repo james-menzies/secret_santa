@@ -27,3 +27,17 @@ Anyone who's after a bit of fun! This game is probably best played amongst frien
 * Postgres / RDS: The underlying implementation of the data layer is a Postgreql database, which is provisioned by Amazon RDS, a managed database service. 
 
 * Celery: This library is used to handle asynchronous background tasks. Celery is primarily used to handle the dispatch of mail requests whilst not locking the thread handling the user request.
+
+## Cloud Architecture
+
+For this application I'm relying on AWS infrastructure. I'm employing Elastic Beanstalk to automatically provision EC2 instances. It will scale between 1-4 instances that are T2.Micros class machines. These machines will be running docker images.
+
+These EC2 instances will be located in private subnets, so in order to access services outside of the VPC, a VPC Endpoint will be used. This will allow the application to update the S3 bucket which hold the static images hosted by the application, as well as trigger the Simple Email Service (SES) that notifies users of application events.
+
+The data layer will be stored in a single T2.medium instance on one of the private subnets.
+
+Route 53 will provide the alias to connect a custom hostname to the Elastic Beanstalk application.
+
+The application therefore can be represented as follows:
+
+![Cloud Architecture Diagram for Secret Santa](docs/images/cloud_architecture_diagram.png)
