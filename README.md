@@ -110,4 +110,4 @@ Route 53 will provide the alias to connect a custom hostname to the Elastic Bean
 
 The application therefore can be represented as follows:
 
-![Cloud Architecture Diagram for Secret Santa](docs/images/cloud_architecture_diagram.png)
+![Cloud Architecture Diagram for Secret Santa](docs/technical_diagrams/cloud_architecture_diagram.png)
