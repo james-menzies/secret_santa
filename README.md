@@ -104,7 +104,20 @@ In order to establish how the application should function, it is important first
 
 ![](docs/technical_diagrams/entity_relationship_diagram.png)
 
-Care has been taken to ensure that data can be updated and read according to the user experience outlined in the wireframes above. Now that the data model 
+Care has been taken to ensure that data can be updated and read according to the user experience outlined in the wireframes above. 
+
+Now that the data model has been established, the flow of data can be established. Firstly, the login loop is shown below. This check is performed on access to **any** page on the website:
+
+![](docs/technical_diagrams/login_dataflow.png)
+
+When a user creates an event, here is the high-level overview of the processes that occur:
+
+![](docs/technical_diagrams/event_creation.png)
+
+And finally, when the creator of an event decided to confirm an event, the following events happen:
+
+![](docs/technical_diagrams/event_confirmation.png)
+
 ## Cloud Architecture
 
 For this application I'm relying on AWS infrastructure. I'm employing Elastic Beanstalk to automatically provision EC2 instances. It will scale between 1-4 instances that are T2.Micro class machines. These machines will be running docker images. This should provide a reasonable amount of scaling without becoming exorbitantly expensive, as horizontal scaling is generally less expensive. The instances will also be distributed across two different availability zones to increase resiliency.
