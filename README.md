@@ -28,6 +28,16 @@ Anyone who's after a bit of fun! This game is probably best played amongst frien
 
 * Celery: This library is used to handle asynchronous background tasks. Celery is primarily used to handle the dispatch of mail requests whilst not locking the thread handling the user request.
 
+## User Stories
+
+The following snippets provide an insight into what kind of user the application is for:
+
+> As a mother with children interstate that can no longer attend the family Christmas, I want to be able to create a moment of connection in order to provide a sense of occasion that would not otherwise be possible.
+
+> As a new manager taking on an established team, I want to host an activity in order to break the ice with my new employees.
+
+> As a motivational speaker, I want to use the Secret Santa game as a mystery 'whodunnit' exercise with my clients, in order to stimulate discussions involving deductive reasoning. 
+
 ## Wireframes
 
 These wireframes below outline the user experience of the application.
@@ -133,3 +143,22 @@ Route 53 will provide the alias to connect a custom hostname to the Elastic Bean
 The application therefore can be represented as follows:
 
 ![Cloud Architecture Diagram for Secret Santa](docs/technical_diagrams/cloud_architecture_diagram.png)
+
+## Project Management 
+
+In order to deliver part A of the assignment in an effective and time sensitive manner, I've utilized the following tools:
+
+* A kanban board in this repository's [project page](https://github.com/redbrickhut/secret_santa/projects).
+* Breaking up tasks by creating [issues](https://github.com/redbrickhut/secret_santa/issues), with which I can keep a running thread of communication. I make extensive use of issue tagging as well.
+
+Screenshots of the kanban board at various stages throughout the project:
+
+![](docs/kanban/Selection_001.png)
+
+![](docs/kanban/Selection_002.png)
+
+![](docs/kanban/Selection_003.png)
+
+![](docs/kanban/Selection_004.png)
+
+![](docs/kanban/Selection_005.png)
