@@ -98,6 +98,13 @@ This is where all users can view events, and what they will see will vary on the
 
 This window, linked from the event view page, allows the user to select an emoji and write a personalized message to their recipient. This is a one shot window, once the user has selected their present there's no taking it back!
 
+## Data Model
+
+In order to establish how the application should function, it is important first to establish a definition for the data that is passed through the system. Since a relational database will serve as the sole persistence layer of the application, an Entity Relationship Diagram is essential as the starting point for development. This is initial proposed scheme:
+
+![](docs/technical_diagrams/entity_relationship_diagram.png)
+
+Care has been taken to ensure that data can be updated and read according to the user experience outlined in the wireframes above. Now that the data model 
 ## Cloud Architecture
 
 For this application I'm relying on AWS infrastructure. I'm employing Elastic Beanstalk to automatically provision EC2 instances. It will scale between 1-4 instances that are T2.Micros class machines. These machines will be running docker images.
