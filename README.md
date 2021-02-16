@@ -7,7 +7,7 @@ This application is a micro-game designed purely around creating the social inte
 2. If a user isn't registered, they'll be invited via the specified email to join up. Once registered they'll be automatically be added to the event. There's no opting out once you've joined Secret Santa, once you're in, you're in!
 3. When the creator of an event is happy that everyone has joined, they can set a time for the big reveal. The gift givers and recipients are all determined and people can start giving.
 4. Now the fun begins! Users will be notified that they have some gifting to do, and can choose their emoji and personalized message of choice.
-5. When the big reveal happense users can log in and open their present, if their gift givers went MIA they'll receive coal instead :(
+5. When the big reveal occurs, users can log in and open their present, if their gift givers went MIA they'll receive coal instead :(
 6. Grinches are pubically shamed, as they should be.
 
 ## Who is This Application For?
@@ -18,15 +18,15 @@ Anyone who's after a bit of fun! This game is probably best played amongst frien
 
 * Python + Django: Serves as the application layer for the program. Handles everything from processing web endpoint requests, and acts as the ORM between the application and data layers.
 
-* AWS Elastic Beanstalk: Provisions the webservers containing the Django applicaton by automatically configuring an auto-scaling group of EC2 instances. 
+* AWS Elastic Beanstalk: Provisions the web servers containing the Django application by automatically configuring an auto-scaling group of EC2 instances. 
 
-* S3 / Cloudfront: Where all static images and emoji gift images are served. S3 physically stores the media, and Cloudfront provisions it through making images available through caching and duplication in locations close to the user.
+* S3 / Cloudfront: Where static content and user uploaded images are stored. S3 physically stores the media, and Cloudfront provisions it through caching and duplicating in edge locations close to the user.
 
 * Amazon Simple Email Service: Responsible for handling email communications to users. This is of particular importance for inviting new users to join, as well as notifying them when they've been added to an event, or when it's present opening time.
 
-* Postgres / RDS: The underlying implementation of the data layer is a Postgreql database, which is provisioned by Amazon RDS, a managed database service. 
+* Postgres / RDS: The underlying implementation of the data layer is a PostgreQL database, which is provisioned by an Amazon EC2 instance.
 
-* Celery: This library is used to handle asynchronous background tasks. Celery is primarily used to handle the dispatch of mail requests whilst not locking the thread handling the user request.
+* Celery: This library is used to handle asynchronous background tasks. Celery ensures that long-running tasks (such as dispatching bulk emails) don't lock the request thread.
 
 ## User Stories
 
@@ -39,8 +39,6 @@ The following snippets provide an insight into what kind of user the application
 > As a motivational speaker, I want to use the Secret Santa game as a mystery 'whodunnit' exercise with my clients, in order to stimulate discussions involving deductive reasoning. 
 
 ## Wireframes
-
-These wireframes below outline the user experience of the application.
 
 ### Login Screen
 
@@ -98,9 +96,9 @@ This is where all users can view events, and what they will see will vary on the
 
 * Post-Gifting Phase: Users will be given a countdown timer for when the event is due to begin.
 
-* Reveal Phase: Users will have a present icon that will reveal their emoji gift and message in an animation.
+* Reveal Phase: Users will be able to view an animation of the present being opened when they click on it.
 
-* Post-Reveal Phase: User can see the gifts that others have received, and who the grinches were.
+* Post-Reveal Phase: The user can now see the gifts that others have received, and who turned out to be a grinch.
 
 ### Gifting Page
 
@@ -130,13 +128,13 @@ And finally, when the creator of an event decided to confirm an event, the follo
 
 ## Cloud Architecture
 
-For this application I'm relying on AWS infrastructure. I'm employing Elastic Beanstalk to automatically provision EC2 instances. It will scale between 1-4 instances that are T2.Micro class machines. These machines will be running docker images. This should provide a reasonable amount of scaling without becoming exorbitantly expensive, as horizontal scaling is generally less expensive. The instances will also be distributed across two different availability zones to increase resiliency.
+For this application I'm relying on AWS infrastructure. I'm employing Elastic Beanstalk to automatically provision EC2 instances. It will scale between 1-4 instances that are T2.micro class machines. These machines will be running docker images. This should provide a reasonable amount of scaling without becoming exorbitantly expensive. The instances will also be distributed across two different availability zones to increase resiliency.
 
 Since these EC2 instances will be located in private subnets, in order to access services outside the VPC, VPC Endpoints will be used. This will allow the application to update the S3 bucket which hold the static images hosted by the application, as well as trigger the Simple Email Service (SES) that notifies users of application events.
 
 The data layer will be stored in a single T2.medium instance on one of the private subnets.
 
-In order for static content to be served to the user, the application will create signed or unsigned URLs as appropriate when generating HTML templates. These URLs when automatically accessed through the browser will direct the user through AWS Cloudfront to retrieve the assets.
+In order for static content to be served to the user, the application will create signed or unsigned URLs as appropriate when generating HTML templates. These URLs when automatically accessed through the browser will retrieve assets through AWS Cloudfront.
 
 Route 53 will provide the alias to connect a custom hostname to the Elastic Beanstalk application.
 
@@ -162,3 +160,5 @@ Screenshots of the kanban board at various stages throughout the project:
 ![](docs/kanban/Selection_004.png)
 
 ![](docs/kanban/Selection_005.png)
+
+![](docs/kanban/Selection_006.png)
