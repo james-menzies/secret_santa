@@ -107,11 +107,13 @@ In order to establish how the application should function, it is important first
 Care has been taken to ensure that data can be updated and read according to the user experience outlined in the wireframes above. Now that the data model 
 ## Cloud Architecture
 
-For this application I'm relying on AWS infrastructure. I'm employing Elastic Beanstalk to automatically provision EC2 instances. It will scale between 1-4 instances that are T2.Micros class machines. These machines will be running docker images.
+For this application I'm relying on AWS infrastructure. I'm employing Elastic Beanstalk to automatically provision EC2 instances. It will scale between 1-4 instances that are T2.Micro class machines. These machines will be running docker images. This should provide a reasonable amount of scaling without becoming exorbitantly expensive, as horizontal scaling is generally less expensive. The instances will also be distributed across two different availability zones to increase resiliency.
 
-These EC2 instances will be located in private subnets, so in order to access services outside of the VPC, a VPC Endpoint will be used. This will allow the application to update the S3 bucket which hold the static images hosted by the application, as well as trigger the Simple Email Service (SES) that notifies users of application events.
+Since these EC2 instances will be located in private subnets, in order to access services outside the VPC, VPC Endpoints will be used. This will allow the application to update the S3 bucket which hold the static images hosted by the application, as well as trigger the Simple Email Service (SES) that notifies users of application events.
 
 The data layer will be stored in a single T2.medium instance on one of the private subnets.
+
+In order for static content to be served to the user, the application will create signed or unsigned URLs as appropriate when generating HTML templates. These URLs when automatically accessed through the browser will direct the user through AWS Cloudfront to retrieve the assets.
 
 Route 53 will provide the alias to connect a custom hostname to the Elastic Beanstalk application.
 
