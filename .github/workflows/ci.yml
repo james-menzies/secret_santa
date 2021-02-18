@@ -16,5 +16,5 @@ jobs:
       - name: Set Up Containers
         run: docker-compose up -d
       - name: Run Tests
-        run: docker-compose exec application python secret_santa/manage.py test
+        run: docker-compose run application python secret_santa/manage.py test
 
