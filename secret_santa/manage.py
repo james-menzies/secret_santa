@@ -6,7 +6,17 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'secret_santa.settings')
+
+    env = os.environ.get("DJANGO_ENV")
+
+    if env == "staging":
+        settings_file = "settings"
+    elif env == "production":
+        settings_file = "settings"
+    else:
+        settings_file = "settings_dev"
+
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', f'secret_santa.{settings_file}')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
