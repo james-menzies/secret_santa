@@ -1,15 +1,29 @@
 version: "3.8"
 services:
   database:
-    container_name: secret_santa_db
-    image: "postgres:latest"
     env_file: .env
+    container_name: ${POSTGRES_HOST}
+    image: "postgres:latest"
+    healthcheck:
+      test:  ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 3s
     volumes:
     - type: volume
       source: secret_santa_data
       target: /var/lib/postgresql/data
     networks:
       - ss_network
+  init:
+    container_name: secret_santa_init
+    env_file: .env
+    build: .
+    image: secret_santa
+    networks:
+      - ss_network
+    command: sh compose_init.sh
+    depends_on:
+      database:
+        condition: service_healthy
   application:
     container_name: secret_santa
     build: .
@@ -23,6 +37,9 @@ services:
       - ss_network
     ports:
     - 80:80
+    depends_on:
+      init:
+        condition: service_started
 volumes:
   secret_santa_data:
     name: secret_santa_data
