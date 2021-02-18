@@ -80,8 +80,12 @@ WSGI_APPLICATION = 'secret_santa.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get("POSTGRES_DB"),
+        'USER': 'postgres',
+        'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),
+        'HOST': 'secret_santa_db',
+        'PORT': 5432,
     }
 }
 
