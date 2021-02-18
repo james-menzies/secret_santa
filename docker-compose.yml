@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  application:
+    container_name: secret_santa
+    build: .
+    image: secret_santa
+    env_file: .env
+    volumes:
+    - type: bind
+      source: ./secret_santa
+      target: /run/secret_santa
+    networks:
+      - ss_network
+    ports:
+    - 80:80
+networks:
+  ss_network:
+    name: ss_network
+    driver: bridge
+
+
+
