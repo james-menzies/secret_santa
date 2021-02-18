@@ -1,1 +1,3 @@
-python secret_santa/manage.py migrate
+cd secret_santa
+python manage.py migrate
+cd ..
