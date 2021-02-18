@@ -11,10 +11,10 @@ jobs:
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v2
-      - name: Set Up Containers
-        run: docker-compose up -d
       - name: Use Default Environment
         run: cp .env.example .env
+      - name: Set Up Containers
+        run: docker-compose up -d
       - name: Run Tests
         run: docker-compose exec application python secret_santa/manage.py test
 
