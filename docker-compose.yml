@@ -18,6 +18,10 @@ services:
     env_file: .env
     build: .
     image: secret_santa
+    volumes:
+    - type: bind
+      source: ./secret_santa
+      target: /run/secret_santa
     networks:
       - ss_network
     command: sh compose_init.sh
