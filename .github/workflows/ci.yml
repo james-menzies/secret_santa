@@ -1,0 +1,20 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches-ignore:
+      - master
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v2
+      - name: Use Default Environment
+        run: cp .env.example .env
+      - name: Set Up Containers
+        run: docker-compose up -d
+      - name: Run Tests
+        run: docker-compose run application python secret_santa/manage.py test
+
