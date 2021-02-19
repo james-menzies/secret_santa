@@ -37,6 +37,9 @@ services:
     - type: bind
       source: ./secret_santa
       target: /run/secret_santa
+    - type: volume
+      source: secret_santa_media
+      target: /var/www/secret_santa/
     networks:
       - ss_network
     ports:
@@ -47,6 +50,8 @@ services:
 volumes:
   secret_santa_data:
     name: secret_santa_data
+  secret_santa_media:
+    name: secret_santa_media
 networks:
   ss_network:
     name: ss_network
