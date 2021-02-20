@@ -8,6 +8,17 @@ ALLOWED_HOSTS = [
     '.elasticbeanstalk.com'
 ]
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ["RDS_DB_NAME"],
+        'USER': os.environ["RDS_USERNAME"],
+        'PASSWORD': os.environ["RDS_PASSWORD"],
+        'HOST': os.environ["RDS_HOSTNAME"],
+        'PORT': os.environ["RDS_PORT"],
+    }
+}
+
 # configure static and media roots
 AWS_LOCATION = 'static/'
 
@@ -15,7 +26,7 @@ AWS_LOCATION = 'static/'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 
-# use AWS credentials, this will take from enviroment varibles,
+# use AWS credentials, this will take from environment variables,
 # however this should only be used when testing production features
 # locally. For production, IAM instance roles should be used instead.
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
