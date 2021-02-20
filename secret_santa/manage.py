@@ -10,7 +10,7 @@ def main():
     env = os.environ.get("DJANGO_ENV")
 
     if env == "staging":
-        settings_file = "settings"
+        settings_file = "settings_staging"
     elif env == "production":
         settings_file = "settings"
     else:

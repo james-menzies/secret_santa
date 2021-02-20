@@ -4,6 +4,7 @@ from .settings import *
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 import os
 
+# Local containerized db.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -18,6 +19,8 @@ DATABASES = {
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+STATIC_URL = '/static/'
 STATIC_ROOT = '/var/www/secret_santa/static/'
 
 MEDIA_URL='/media/'

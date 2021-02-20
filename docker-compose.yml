@@ -56,6 +56,3 @@ networks:
   ss_network:
     name: ss_network
     driver: bridge
-
-
-
