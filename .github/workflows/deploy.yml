@@ -33,3 +33,8 @@ jobs:
           --version-label ${{ env.filename }}
           --source-bundle S3Bucket=${{ secrets.AWS_BUCKET_NAME }},S3Key=ss/${{ env.filename }}.zip
       - name: Deploy New Version in Staging Environment
+        run: >
+          aws elasticbeanstalk update-environment
+          --application-name SecretSanta
+          --environment-name SecretSanta-staging
+          --version-label ${{ env.filename }}
