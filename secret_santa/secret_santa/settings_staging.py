@@ -1,7 +1,7 @@
 from .settings import *
 
 # DEBUG must be false
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
