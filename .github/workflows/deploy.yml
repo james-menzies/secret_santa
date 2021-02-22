@@ -12,12 +12,12 @@ jobs:
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v2
-      - name: Calculate File Name
-        run: echo "filename=ss_$( git rev-parse --short HEAD )" > $GITHUB_ENV
+      - name: Calculate Version Number
+        run: echo "VERSION_NO=$ss_{GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Zip Source Files
         run: |
           cd secret_santa
-          zip -r ~/${{ env.filename }}.zip $(ls -A)
+          zip -r ~/${{ env.VERSION_NO }}.zip $(ls -A)
           ls ~
       - name: Authenticate AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
@@ -29,17 +29,17 @@ jobs:
         run: >
           aws s3api put-object
           --bucket ${{ secrets.AWS_BUCKET_NAME }}
-          --key ss/${{ env.filename }}.zip
-          --body ~/${{ env.filename }}.zip
+          --key ss/${{ env.VERSION_NO }}.zip
+          --body ~/${{ env.VERSION_NO }}.zip
       - name: Create new EB Application Version
         run: >
           aws elasticbeanstalk create-application-version
           --application-name SecretSanta
-          --version-label ${{ env.filename }}
-          --source-bundle S3Bucket=${{ secrets.AWS_BUCKET_NAME }},S3Key=ss/${{ env.filename }}.zip
+          --version-label ${{ env.VERSION_NO }}
+          --source-bundle S3Bucket=${{ secrets.AWS_BUCKET_NAME }},S3Key=ss/${{ env.VERSION_NO }}.zip
       - name: Deploy New Version in Staging Environment
         run: >
           aws elasticbeanstalk update-environment
           --application-name SecretSanta
           --environment-name SecretSanta-staging
-          --version-label ${{ env.filename }}
+          --version-label ${{ env.VERSION_NO }}
