@@ -1,12 +1,10 @@
 name: Deploy to Staging Environment
-#
-#on:
-#  push:
-#    branches:
-#      - master
-#    tags:
-#      - '*'
-on: push
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
 jobs:
   deploy:
     name: Deploy to Staging Environment
