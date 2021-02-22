@@ -1,4 +1,11 @@
-on: push
+name: Deploy to Staging Environment
+#
+#on:
+#  push:
+#    branches:
+#      - master
+#    tags:
+#      - '*'
 
 jobs:
   deploy:
