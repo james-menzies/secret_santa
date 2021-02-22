@@ -27,3 +27,11 @@ def register(request):
     if request.method == "GET":
         form = UserRegistrationForm()
         return render(request, 'users/register.html', context={"form": form})
+    else:
+        form = UserRegistrationForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+
+            return redirect(reverse('login'))
+        else:
+            return redirect('register')
