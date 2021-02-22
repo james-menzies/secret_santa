@@ -11,7 +11,7 @@ jobs:
       - name: Checkout Branch
         uses: actions/checkout@v2
       - name: Calculate Version Number
-        run: echo "VERSION_NO=$ss_{GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+        run: echo "VERSION_NO=ss_${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Zip Source Files
         run: |
           cd secret_santa
