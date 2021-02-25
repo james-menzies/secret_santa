@@ -43,7 +43,7 @@ services:
     networks:
       - ss_network
     ports:
-    - 80:80
+    - 80:8000
     depends_on:
       init:
         condition: service_started

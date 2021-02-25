@@ -10,4 +10,4 @@ COPY . .
 
 RUN chmod 700 ./compose_init.sh
 
-CMD ["python", "secret_santa/manage.py", "runserver", "0.0.0.0:80"]
+CMD ["python", "secret_santa/manage.py", "runserver", "0.0.0.0:8000"]
