@@ -60,17 +60,7 @@ jobs:
           image: $IMAGE
       - name: Upload JSON artifact
         id: upload-json
-
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.task_def }}.json
           path: ${{ steps.update-task-definition.outputs.task-definition }}
-
-#      - name: Update Task Definition in ECS and Deploy
-#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-#        with:
-#          task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
-#          service: secret-santa-web-app
-#          cluster: secret-santa-cluster-env
-#          wait-for-service-stability: true
-#
