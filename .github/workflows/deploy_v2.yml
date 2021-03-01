@@ -65,7 +65,7 @@ jobs:
           service: secret-santa-web-app
           cluster: secret-santa-cluster-env
           wait-for-service-stability: true
-        if: ${{ matrix.task_def == "web-application-server" }}
+        if: ${{ matrix.task_def }} == "web-application-server"
       - name: Update Migrate Task Definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
