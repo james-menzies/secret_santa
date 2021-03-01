@@ -58,14 +58,14 @@ jobs:
           task-definition: task_definition.json
           container-name: secret-santa-application
           image: $IMAGE
-#      - name: Update Task Definition in ECS and Deploy
-#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-#        with:
-#          task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
-#          service: secret-santa-web-app
-#          cluster: secret-santa-cluster-env
-#          wait-for-service-stability: true
-#        if: matrix.task_def == "web-application-server"
+      - name: Update Task Definition in ECS and Deploy
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
+          service: secret-santa-web-app
+          cluster: secret-santa-cluster-env
+          wait-for-service-stability: true
+        if: matrix.task_def == "web-application-server"
       - name: Update Migrate Task Definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
@@ -76,4 +76,5 @@ jobs:
           aws ecs run-task
           --cluster secret-santa-cluster-env
           --task-definition secret-santa-${{ matrix.task_def }}
+          --network-configuration awsvpcConfiguration={subnets=[${{ secrets.TASK_SUBNET}}]}
         if: matrix.task_def == "handle-migrations"
