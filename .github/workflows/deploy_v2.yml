@@ -57,7 +57,7 @@ jobs:
         with:
           task-definition: task_definition.json
           container-name: secret-santa-application
-          image: env.IMAGE
+          image: ${{ env.IMAGE }}
       - name: Test
         run: cat ${{ steps.update-task-definition.outputs.task-definition }}
       - name: Update Task Definition in ECS and Deploy
