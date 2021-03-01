@@ -33,7 +33,7 @@ jobs:
       - name: Render Task Definition
         run: "aws ecs describe-task-definition --task-definition secret-santa-web-application-server > task_definition.json"
       - name: Test for task def file
-        run: ls -lah
+        run: cat task_definition.json
       - name: Update Task Definition to Latest Version
         id: update-task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
