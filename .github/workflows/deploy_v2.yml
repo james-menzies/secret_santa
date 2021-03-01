@@ -70,11 +70,11 @@ jobs:
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
-        if: ${{ matrix.task_def } == "handle-migrations"
+        if: ${{ matrix.task_def }} == "handle-migrations"
       - name: Run Migration task on Cluster
         run: >
           aws ecs run-task
           --cluster secret-santa-cluster-env
           --task-definition secret-santa-${{ matrix.task_def }}
           --network-configuration awsvpcConfiguration={subnets=[${{ secrets.TASK_SUBNET}}]}
-        if: ${{ matrix.task_def == "handle-migrations"
+        if: ${{ matrix.task_def }} == "handle-migrations"
