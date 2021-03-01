@@ -19,8 +19,8 @@ jobs:
           aws-region: ap-southeast-2
       - name: Render Task Definition
         run: >
-        aws ecs describe-task-definition
+        "aws ecs describe-task-definition
         --task-definition secret-santa-web-application-server
-        &#62; task_definition.json
+        > task_definition.json"
 
 
