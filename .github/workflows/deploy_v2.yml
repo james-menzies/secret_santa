@@ -39,7 +39,7 @@ jobs:
     strategy:
       matrix:
         task_def: [
-          "handle-migrations"
+          "handle-migrations",
           "web-application-server"
         ]
     steps:
