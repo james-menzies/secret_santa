@@ -22,6 +22,10 @@ def log_out(request):
     logout(request)
     return redirect(reverse('login'))
 
+def profile(request):
+
+    return render(request, template_name='users/profile.html')
+
 
 def register(request):
     if request.method == "GET":
