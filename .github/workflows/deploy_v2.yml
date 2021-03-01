@@ -30,15 +30,15 @@ jobs:
           docker build --tag ${{ secrets.CONTAINER }}:$IMAGE_TAG .
           docker push ${{ secrets.CONTAINER }}:$IMAGE_TAG
           echo "::set-output name=image::$IMAGE_TAG"
-  update-service:
+  generate-json-definitions:
     name: Update Relevant Task Definitions and Upload Locally
     runs-on: ubuntu-latest
     needs: update-image
     strategy:
       matrix:
         task_def: [
-          "handle-migrations",
-          "web-application-server"
+            "handle-migrations",
+            "web-application-server"
         ]
     steps:
       - name: Authenticate AWS CLI
@@ -58,9 +58,22 @@ jobs:
           task-definition: task_definition.json
           container-name: secret-santa-application
           image: $IMAGE
-      - name: Upload JSON artifact
-        id: upload-json
-        uses: actions/upload-artifact@v2
+#      - name: Update Task Definition in ECS and Deploy
+#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+#        with:
+#          task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
+#          service: secret-santa-web-app
+#          cluster: secret-santa-cluster-env
+#          wait-for-service-stability: true
+#        if: matrix.task_def == "web-application-server"
+      - name: Update Migrate Task Definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          name: ${{ matrix.task_def }}.json
-          path: ${{ steps.update-task-definition.outputs.task-definition }}
+          task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
+        if: matrix.task_def == "handle-migrations"
+      - name: Run Migration task on Cluster
+        run: >
+          aws ecs run-task
+          --cluster secret-santa-cluster-env
+          --task-definition secret-santa-${{ matrix.task_def }}
+        if: matrix.task_def == "handle-migrations"
