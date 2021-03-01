@@ -57,7 +57,7 @@ jobs:
         with:
           task-definition: task_definition.json
           container-name: secret-santa-application
-          image: ${{ needs.update-image.outputs.image }}
+          image: ${{needs.update-image.outputs.image}}
       - name: Upload JSON artifact
         id: upload-json
         uses: actions/upload-artifact@v2
