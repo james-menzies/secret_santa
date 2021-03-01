@@ -58,7 +58,7 @@ jobs:
           task-definition: task_definition.json
           container-name: secret-santa-application
           image: $IMAGE
-          run: echo $IMAGE
+        run: echo $IMAGE
       - name: Update Task Definition in ECS and Deploy
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
