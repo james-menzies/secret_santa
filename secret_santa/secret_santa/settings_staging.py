@@ -1,15 +1,9 @@
 from .settings import *
 
-# DEBUG must be false
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    os.environ.get("ALLOWED_REMOTE_HOST")
-]
-
-ALLOWED_CIDR_NETS = [
-    os.environ.get("allowed_remote_cidr_net"),
+    '*'
 ]
 
 # configure static and media roots

@@ -54,7 +54,6 @@ DATABASES = {
 }
 
 MIDDLEWARE = [
-    'allow_cidr.middleware.AllowCIDRMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

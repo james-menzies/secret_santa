@@ -6,8 +6,6 @@ COPY secret_santa/requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY secret_santa .
 
-RUN chmod 700 ./compose_init.sh
-
-CMD ["python", "secret_santa/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "-w", "2", "--access-logfile", "-", "secret_santa.wsgi:application"]
