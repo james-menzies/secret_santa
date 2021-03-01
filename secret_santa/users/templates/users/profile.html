@@ -4,6 +4,5 @@
 {% block content %}
     <p>Profile of {{ user.email }}</p>
     <img src="{{ user.profile_picture.url }}" alt="">
-    <a href="{% url 'profile' %}">Click here to view profile</a>
 
 {% endblock %}

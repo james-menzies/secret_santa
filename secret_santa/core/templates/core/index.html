@@ -3,4 +3,5 @@
 {% block content %}
     <p>Welcome, {{ user.email }}. <a href="{% url 'logout' %}">Log out</a></p>
     <h1>This is an updated landing page</h1>
+    <a href="{% url 'profile' %}">Click here to view profile</a>
 {% endblock %}
