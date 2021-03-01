@@ -3,7 +3,7 @@ on:
   push:
 
 jobs:
-  update_image:
+  update-image:
     name: Push New Version of Application to ECR
     runs-on: ubuntu-latest
     outputs:
@@ -32,7 +32,7 @@ jobs:
           docker build --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-  update_service:
+  update-service:
     name: Update Relevant Task Definitions and Upload Locally
     runs-on: ubuntu-latest
     needs: update-image
