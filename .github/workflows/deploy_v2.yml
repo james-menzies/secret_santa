@@ -31,7 +31,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
       - name: Render Task Definition
-        run: "aws ecs describe-task-definition --task-definition secret-santa-web-application-server > task_definition.json"
+        run: "aws ecs describe-task-definition --task-definition secret-santa-web-application-server --query taskDefinition > task_definition.json"
       - name: Test for task def file
         run: cat task_definition.json
       - name: Update Task Definition to Latest Version
@@ -41,9 +41,9 @@ jobs:
           task-definition: task_definition.json
           container-name: secret-santa-application
           image: ${{ steps.ecr-push.outputs.image }}
-      - name: Deploy to Amazon ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
+#      - name: Deploy to Amazon ECS service
+#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+#        with:
+#          task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
 
 
