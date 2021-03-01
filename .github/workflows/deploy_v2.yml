@@ -17,7 +17,31 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_DEPLOY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_DEPLOY_SECRET }}
           aws-region: ap-southeast-2
+      - name: Login to ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Push New Container to ECR
+        id: ecr-push
+        env:
+          ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          ECR_REPOSITORY: secret-santa
+          IMAGE_TAG: 9999
+        run: |
+          docker build --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo ":: set-output name=image:: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
       - name: Render Task Definition
         run: "aws ecs describe-task-definition --task-definition secret-santa-web-application-server > task_definition.json"
+      - name: Update Task Definition to Latest Version
+        id: update-task-definition
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task_definition.json
+          container_name: secret-santa-application
+          image: ${{ steps.ecr-push.outputs.image }}
+      - name: Deploy to Amazon ECS service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
 
 
