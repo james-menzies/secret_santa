@@ -37,7 +37,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task_definition.json
-          container_name: secret-santa-application
+          container-name: secret-santa-application
           image: ${{ steps.ecr-push.outputs.image }}
       - name: Deploy to Amazon ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
