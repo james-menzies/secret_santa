@@ -25,13 +25,11 @@ jobs:
       - name: Push New Container to ECR
         id: ecr-push
         env:
-          ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
-          ECR_REPOSITORY: secret-santa
           IMAGE_TAG: 9999
         run: |
-          docker build --tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker build --tag ${{ secrets.CONTAINER }}:$IMAGE_TAG .
+          docker push ${{ secrets.CONTAINER }}:$IMAGE_TAG
+          echo "::set-output name=image::$IMAGE_TAG"
   update-service:
     name: Update Relevant Task Definitions and Upload Locally
     runs-on: ubuntu-latest
@@ -54,12 +52,15 @@ jobs:
       - name: Generate JSON for New Task Definition
         id: update-task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
+        env:
+          IMAGE: "${{ secrets.CONTAINER }}:${{ needs.update-image.outputs.image }}
         with:
           task-definition: task_definition.json
           container-name: secret-santa-application
-          image: ${{needs.update-image.outputs.image}}
+          image: $IMAGE
       - name: Upload JSON artifact
         id: upload-json
+
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.task_def }}.json
