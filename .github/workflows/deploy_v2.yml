@@ -53,7 +53,7 @@ jobs:
         id: update-task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         env:
-          IMAGE: "${{ secrets.CONTAINER }}:${{ needs.update-image.outputs.image }}
+          IMAGE: "${{ secrets.CONTAINER }}:${{ needs.update-image.outputs.image }}"
         with:
           task-definition: task_definition.json
           container-name: secret-santa-application
