@@ -41,9 +41,11 @@ jobs:
           task-definition: task_definition.json
           container-name: secret-santa-application
           image: ${{ steps.ecr-push.outputs.image }}
-      - name: Update Task Definition in ECS
+      - name: Update Task Definition in ECS and Deploy
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
-
+          service: secret-santa-web-app
+          cluster: secret-santa-cluster-env
+          wait-for-service-stability: true
 
