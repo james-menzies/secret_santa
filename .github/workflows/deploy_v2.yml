@@ -50,9 +50,9 @@ jobs:
           aws-region: ap-southeast-2
       - name: Retrieve JSON Data for Latest Task Definition
         run: >
-        aws ecs describe-task-definition
-        --task-definition secret-santa-${{ matrix.task_def }}
-        --query taskDefinition > task_definition.json
+        "aws ecs describe-task-definition"
+        "--task-definition secret-santa-${{ matrix.task_def }}"
+        "--query taskDefinition > task_definition.json"
       - name: Generate JSON for New Task Definition
         id: update-task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
