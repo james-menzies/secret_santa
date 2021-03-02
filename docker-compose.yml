@@ -20,7 +20,7 @@ services:
     image: secret_santa
     networks:
       - ss_network
-    command: python manage.py migrate
+    command: bash init_version.sh
     depends_on:
       database:
         condition: service_healthy
