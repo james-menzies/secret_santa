@@ -3,6 +3,9 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
+from events.models import Event
+
+
 class CustomUserManager(BaseUserManager):
 
     def create_user(self, email, password, **kwargs):
@@ -30,6 +33,7 @@ class CustomUser(AbstractUser):
     username = None
     email = models.EmailField("email", unique=True)
     profile_picture = models.ImageField(upload_to='profiles', null=True, blank=True)
+    events = models.ManyToManyField(Event)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
