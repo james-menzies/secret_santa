@@ -52,8 +52,7 @@ jobs:
         run: >
         aws ecs describe-task-definition
         --task-definition secret-santa-${{ matrix.task_def }}
-        --query taskDefinition
-        "> task_definition.json"
+        --query taskDefinition > task_definition.json
       - name: Generate JSON for New Task Definition
         id: update-task-definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
