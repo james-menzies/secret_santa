@@ -3,41 +3,102 @@ on:
   push:
     tags:
       - 'v*'
+
 jobs:
-  deploy:
-    name: Deploy to Staging Environment
+  update-image:
+    name: Push New Version of Application to ECR
     runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.ecr-push.outputs.image }}
     steps:
       - name: Checkout Branch
         uses: actions/checkout@v2
       - name: Calculate Version Number
         run: echo "VERSION_NO=ss_${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Zip Source Files
-        run: |
-          cd secret_santa
-          zip -r ~/${{ env.VERSION_NO }}.zip $(ls -A)
-          ls ~
       - name: Authenticate AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_DEPLOY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_DEPLOY_SECRET }}
           aws-region: ap-southeast-2
-      - name: Upload Source Code to S3
+      - name: Login to ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Push New Container to ECR
+        id: ecr-push
+        env:
+          IMAGE_TAG: ${{ env.VERSION_NO }}
+        run: |
+          docker build --tag ${{ secrets.CONTAINER }}:$IMAGE_TAG .
+          docker push ${{ secrets.CONTAINER }}:$IMAGE_TAG
+          echo "::set-output name=image::$IMAGE_TAG"
+  deploy-new-version:
+    name: Deploy Migration Task and Update Service
+    runs-on: ubuntu-latest
+    needs: update-image
+    strategy:
+      matrix:
+        task_def: [
+            "handle-migrations",
+            "web-application-server"
+        ]
+      max-parallel: 1
+    steps:
+      - name: Authenticate AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_DEPLOY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_DEPLOY_SECRET }}
+          aws-region: ap-southeast-2
+      - name: Retrieve JSON Data for Latest Task Definition
         run: >
-          aws s3api put-object
-          --bucket ${{ secrets.AWS_BUCKET_NAME }}
-          --key ss/${{ env.VERSION_NO }}.zip
-          --body ~/${{ env.VERSION_NO }}.zip
-      - name: Create new EB Application Version
+            aws ecs describe-task-definition
+            --task-definition secret-santa-${{ matrix.task_def }}
+            --query taskDefinition > task_definition.json
+      - name: Generate JSON for New Task Definition
+        id: update-task-definition
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        env:
+          IMAGE: "${{ secrets.CONTAINER }}:${{ needs.update-image.outputs.image }}"
+        with:
+          task-definition: task_definition.json
+          container-name: secret-santa-application
+          image: ${{ env.IMAGE }}
+      - name: Test
+        run: cat ${{ steps.update-task-definition.outputs.task-definition }}
+      - name: Update Task Definition in ECS and Deploy
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
+          service: secret-santa-web-app
+          cluster: secret-santa-cluster-env
+          wait-for-service-stability: true
+        if: matrix.task_def == 'web-application-server'
+      - name: Update Migrate Task Definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.update-task-definition.outputs.task-definition }}
+        if: matrix.task_def == 'handle-migrations'
+      - name: Run Migration task on Cluster
         run: >
-          aws elasticbeanstalk create-application-version
-          --application-name SecretSanta
-          --version-label ${{ env.VERSION_NO }}
-          --source-bundle S3Bucket=${{ secrets.AWS_BUCKET_NAME }},S3Key=ss/${{ env.VERSION_NO }}.zip
-      - name: Deploy New Version in Staging Environment
+          aws ecs run-task
+          --cluster secret-santa-cluster-env
+          --task-definition secret-santa-${{ matrix.task_def }}
+          --network-configuration awsvpcConfiguration={subnets=[${{ secrets.TASK_SUBNET}}]}
+        if: matrix.task_def == 'handle-migrations'
+  invalidate-cache:
+    name: Invalidate Cloudfront Distro to Reflect New Static Content
+    runs-on: ubuntu-latest
+    needs: deploy-new-version
+    steps:
+      - name: Authenticate AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_DEPLOY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_DEPLOY_SECRET }}
+          aws-region: ap-southeast-2
+      - name: Invalidate Cache
         run: >
-          aws elasticbeanstalk update-environment
-          --application-name SecretSanta
-          --environment-name SecretSanta-staging
-          --version-label ${{ env.VERSION_NO }}
+          aws cloudfront create-invalidation
+          --distribution-id ${{ secrets.CLOUDFRONT_ID }}
+          --paths "/static/*"
