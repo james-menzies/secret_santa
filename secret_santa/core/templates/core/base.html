@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
 </head>
 <body>
+    <div class="navbar">
+        {% block navbar %}
+        {% endblock %}
+    </div>
     <div class="main-container">
         {% block content %}
         {%  endblock %}

@@ -1,8 +1,11 @@
-{% extends 'core/base.html' %}
+{% extends 'core/navbar_base.html' %}
 {% load static %}
 
 {% block content %}
     <p>Profile of {{ user.email }}</p>
-    <img src="{{ user.profile_picture.url }}" alt="">
+    <div>
+        <img src="{{ user.profile_picture.url }}" alt="">
+    </div>
 
+    <a href="{% url 'edit_profile' %}">Edit Profile</a>
 {% endblock %}

@@ -39,3 +39,6 @@ def register(request):
             return redirect(reverse('login'))
         else:
             return redirect('register')
+
+def edit_profile(request):
+    return render(request, 'users/edit_profile.html')
