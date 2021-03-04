@@ -7,7 +7,7 @@
     {% else %}
         <h1>New Event</h1>
     {% endif %}
-    <form action="" method="post" id="form-container">
+    <form action="" method="post" id="form-container" enctype="multipart/form-data">
         {% csrf_token %}
         {{ event_form.as_p }}
         {{ email_formset.management_form }}

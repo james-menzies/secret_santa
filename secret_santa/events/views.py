@@ -11,7 +11,7 @@ from users.models import CustomUser
 
 def create(request):
     if request.method == 'POST':
-        event_form = EventForm(request.POST, request.FILES)
+        event_form = EventForm(data=request.POST, files=request.FILES)
         email_formset = EmailFormSet(request.POST, prefix='emails')
 
         if event_form.is_valid() and email_formset.is_valid():
