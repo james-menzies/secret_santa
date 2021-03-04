@@ -2,6 +2,25 @@
 
 {% block content %}
 
-    <h1>Event List View</h1>
-    <p>There are no events.</p>
+    <h1>Event List </h1>
+    {% for event in object_list %}
+        <p>Name: {{ event.name }}</p>
+        <p>Length: {{ event.game_length }} Minutes</p>
+        {% if event.description %}
+            <p>Description: {{ event.description }}</p>
+        {% else %}
+            <p>(No description provided)</p>
+        {% endif %}
+        {% if event.image %}
+        <img src="{{ event.image.url }}" alt="">
+        {% else %}
+        <p>(No image provided)</p>
+        {% endif %}
+        <a href="{% url 'view_event' event_id=event.id %}">Click here to view.</a>
+        <p>---</p>
+    {% empty %}
+        <p>There are no events.
+            <a href="{% url 'create_event' %}">Make one now!</a>
+        </p>
+    {% endfor %}
 {% endblock %}

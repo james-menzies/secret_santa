@@ -2,7 +2,10 @@ from django.forms import formset_factory
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.views.generic import ListView
+
 from events.forms import EventForm, EmailForm, EmailFormSet
+from events.models import Event
 from users.models import CustomUser
 
 
@@ -37,9 +40,15 @@ def create(request):
         return render(request, 'events/edit_event.html', context=context)
 
 
-def view_all(request):
-    return render(request, 'events/events.html')
+class EventListView(ListView):
 
+    model = Event
+    allow_empty = True
+    template_name = 'events/events.html'
+
+    def get_queryset(self):
+
+       return Event.objects.filter(participants__email=self.request.user.email)
 
 def view_single(request, event_id: int):
     return render(request, 'events/event_view.html', context={"id": event_id})
