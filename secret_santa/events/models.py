@@ -7,13 +7,23 @@ from users.models import CustomUser
 
 
 class Event(models.Model):
+    class EventStatus(models.TextChoices):
+        INACTIVE = 'I'
+        ACTIVE = 'A'
+        CONCLUDED = 'C'
+
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=1000, null=True, blank=True)
     image = models.ImageField(upload_to='event_pictures', null=True, blank=True)
     game_length = models.IntegerField(
         validators=(MinValueValidator(3), MaxValueValidator(60)))
     created_at = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False)
+    conclusion = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(
+        max_length=1,
+        choices=EventStatus.choices,
+        default=EventStatus.INACTIVE,
+    )
     revealed = models.BooleanField(default=True)
     owner = models.ForeignKey(CustomUser, related_name='owned_events', on_delete=models.CASCADE)
     participants = models.ManyToManyField(CustomUser, related_name='events')
