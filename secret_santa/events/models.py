@@ -32,20 +32,23 @@ class Event(models.Model):
         return f"<Event: {self.name}>"
 
 
-class Gift(models.Model):
-    message = models.CharField(max_length=100)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE,
-                              related_name='gifts',
-                              related_query_name='gifts')
-
-
-
-
 class Emoji(models.Model):
-
     image = models.ImageField(upload_to='emojis', null=False, blank=False)
     name = models.CharField(max_length=20, blank=False, null=False)
     description = models.CharField(max_length=50, blank=False, null=False)
 
     def __str__(self):
         return f"<Emoji: {self.name}>"
+
+
+class Gift(models.Model):
+    message = models.CharField(max_length=100)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE,
+                              related_name='gifts',
+                              related_query_name='gifts')
+
+    donor = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
+    recipient = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
+    emoji = models.ForeignKey(Emoji, on_delete=models.DO_NOTHING)
+
+
