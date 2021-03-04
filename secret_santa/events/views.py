@@ -1,12 +1,12 @@
-from django.forms import formset_factory
-from django.http import Http404
-from django.shortcuts import render, redirect
+import random
 
+from django.http import HttpResponseBadRequest
+from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from django.views.generic import ListView, DetailView
 
-from events.forms import EventForm, EmailForm, EmailFormSet
-from events.models import Event
+from events.forms import EventForm, EmailFormSet
+from events.models import Event, Gift
 from users.models import CustomUser
 
 
@@ -67,3 +67,32 @@ def give_gift(request, event_id: int):
 
 def edit_event(request, event_id: int):
     return render(request, 'events/edit_event.html', context={"id": event_id})
+
+def activate_event(request, pk: int):
+
+    qs = Event.objects.filter(owner__email=request.user.email).prefetch_related('participants')
+    event = get_object_or_404(qs)
+
+    if len(event.participants) < 3 or event.status != Event.EventStatus.INACTIVE:
+        return HttpResponseBadRequest()
+
+
+    participants = event.participants[:]
+    random.shuffle(participants)
+    gifts = []
+
+    for index, participant in enumerate(participants):
+
+        gift = Gift()
+        gift.donor = participant
+        gift.recipient = participants[index - 1]
+        gifts.append(gift)
+
+    event.status = Event.EventStatus.ACTIVE
+    event.gifts = gifts
+
+    event.save()
+    return redirect('view_event', pk=pk)
+
+
+
