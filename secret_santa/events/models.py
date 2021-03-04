@@ -42,7 +42,7 @@ class Emoji(models.Model):
 
 
 class Gift(models.Model):
-    message = models.CharField(max_length=100)
+    message = models.CharField(max_length=100, blank=True, null=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE,
                               related_name='gifts',
                               related_query_name='gifts')
@@ -51,6 +51,6 @@ class Gift(models.Model):
                               related_name='+')
     recipient = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING,
                                   related_name='+')
-    emoji = models.ForeignKey(Emoji, on_delete=models.DO_NOTHING)
+    emoji = models.ForeignKey(Emoji, on_delete=models.DO_NOTHING, null=True)
 
 

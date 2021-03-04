@@ -1,4 +1,5 @@
 import random
+from datetime import datetime, timedelta
 
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
@@ -70,14 +71,14 @@ def edit_event(request, event_id: int):
 
 def activate_event(request, pk: int):
 
-    qs = Event.objects.filter(owner__email=request.user.email).prefetch_related('participants')
-    event = get_object_or_404(qs)
+    qs = Event.objects.filter(owner__email=request.user.email)
+    event = get_object_or_404(qs, pk=pk)
+    participants = list(event.participants.all())
 
-    if len(event.participants) < 3 or event.status != Event.EventStatus.INACTIVE:
+    if len(participants) < 3 or event.status != Event.EventStatus.INACTIVE:
         return HttpResponseBadRequest()
 
 
-    participants = event.participants[:]
     random.shuffle(participants)
     gifts = []
 
@@ -86,10 +87,15 @@ def activate_event(request, pk: int):
         gift = Gift()
         gift.donor = participant
         gift.recipient = participants[index - 1]
+        gift.event_id = pk
         gifts.append(gift)
 
+    Gift.objects.bulk_create(gifts)
     event.status = Event.EventStatus.ACTIVE
-    event.gifts = gifts
+    conclusion = datetime.now() + timedelta(minutes=event.game_length)
+    event.conclusion = conclusion
+
+    # todo create async task that concludes event
 
     event.save()
     return redirect('view_event', pk=pk)
