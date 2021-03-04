@@ -1,12 +1,14 @@
 import random
 from datetime import datetime, timedelta
 
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Model
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from django.views.generic import ListView, DetailView
 
-from events.forms import EventForm, EmailFormSet
+from events.forms import EventForm, EmailFormSet, GiftForm
 from events.models import Event, Gift
 from users.models import CustomUser
 
@@ -62,15 +64,38 @@ class EventView(DetailView):
         return qs.filter(participants__email=self.request.user.email)
 
 
-def give_gift(request, event_id: int):
-    return render(request, 'events/edit_gift.html', context={"id": event_id})
+def give_gift(request, pk: int):
+    qs = Gift.objects\
+        .filter(event_id=pk)\
+        .filter(event__status=Event.EventStatus.ACTIVE)\
+        .filter(donor__email=request.user.email)\
+        .filter(emoji_id__isnull=True)
+
+    try:
+        gift = qs.get()
+    except ObjectDoesNotExist:
+        return redirect('view_event', pk=pk)
+
+
+    if request.method == 'POST':
+        form = GiftForm(data=request.POST, instance=gift)
+        if form.is_valid():
+            form.save()
+            return redirect('view_event', pk=pk)
+    else:
+
+        form = GiftForm(instance=gift)
+        return render(request, 'events/edit_gift.html', context={
+            'form': form,
+            'gift': gift,
+        })
 
 
 def edit_event(request, event_id: int):
     return render(request, 'events/edit_event.html', context={"id": event_id})
 
-def activate_event(request, pk: int):
 
+def activate_event(request, pk: int):
     qs = Event.objects.filter(owner__email=request.user.email)
     event = get_object_or_404(qs, pk=pk)
     participants = list(event.participants.all())
@@ -78,12 +103,10 @@ def activate_event(request, pk: int):
     if len(participants) < 3 or event.status != Event.EventStatus.INACTIVE:
         return HttpResponseBadRequest()
 
-
     random.shuffle(participants)
     gifts = []
 
     for index, participant in enumerate(participants):
-
         gift = Gift()
         gift.donor = participant
         gift.recipient = participants[index - 1]
@@ -99,6 +122,3 @@ def activate_event(request, pk: int):
 
     event.save()
     return redirect('view_event', pk=pk)
-
-
-

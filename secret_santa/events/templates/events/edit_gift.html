@@ -3,4 +3,11 @@
 {% block content %}
 
     <h1>Gift Edit View</h1>
+    <p>Giving gift to: {{ gift.recipient.email }}</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Give">
+
+    </form>
 {% endblock %}
