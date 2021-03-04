@@ -18,6 +18,9 @@ class Event(models.Model):
     owner = models.ForeignKey(CustomUser, related_name='owned_events', on_delete=models.CASCADE)
     participants = models.ManyToManyField(CustomUser, related_name='events')
 
+    def __str__(self):
+        return f"<Event: {self.name}>"
+
 
 class Gift(models.Model):
     message = models.CharField(max_length=100)

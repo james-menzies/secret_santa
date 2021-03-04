@@ -14,6 +14,6 @@ class EventForm(ModelForm):
 
 class EmailForm(forms.Form):
 
-    email = EmailField(label='Email')
+    email = EmailField(label='Email', required=False)
 
 EmailFormSet = formset_factory(EmailForm, extra=1, min_num=4, max_num=9, validate_max=True)

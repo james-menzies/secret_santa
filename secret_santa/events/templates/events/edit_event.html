@@ -2,11 +2,10 @@
 
 {% block content %}
 
-    <h1>Event Edit View</h1>
     {% if id %}
-        <p>Editing event no: {{ id }}</p>
+        <h1>Editing event no: {{ id }}</h1>
     {% else %}
-        <p>New Event</p>
+        <h1>New Event</h1>
     {% endif %}
     <form action="" method="post" id="form-container">
         {% csrf_token %}
