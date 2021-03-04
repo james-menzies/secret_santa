@@ -54,15 +54,19 @@ class EventListView(ListView):
         return Event.objects.filter(participants__email=self.request.user.email)
 
 
-class EventView(DetailView):
-    model = Event
-    context_object_name = 'event'
-    template_name = 'events/event_view.html'
+def event_view(request, pk: int):
+    qs = Event.objects.filter(id=pk).filter(participants__email=request.user.email)
 
-    def get_queryset(self):
-        qs = super(EventView, self).get_queryset()
-        return qs.filter(participants__email=self.request.user.email)
+    try:
+        event = qs.get()
+    except ObjectDoesNotExist:
+        return redirect('landing_page')
 
+    if event.status == Event.EventStatus.INACTIVE:
+        participants = event.participants.all()
+        return render(request, 'events/event_view_inactive.html', {"participants":participants})
+
+    return render(request, 'events/event_view.html', {"event": event})
 
 def give_gift(request, pk: int):
     qs = Gift.objects\
