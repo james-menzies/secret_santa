@@ -47,8 +47,10 @@ class Gift(models.Model):
                               related_name='gifts',
                               related_query_name='gifts')
 
-    donor = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
-    recipient = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING)
+    donor = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING,
+                              related_name='+')
+    recipient = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING,
+                                  related_name='+')
     emoji = models.ForeignKey(Emoji, on_delete=models.DO_NOTHING)
 
 
