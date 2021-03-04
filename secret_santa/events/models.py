@@ -37,3 +37,10 @@ class Gift(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE,
                               related_name='gifts',
                               related_query_name='gifts')
+
+class Emoji(models.Model):
+
+    image = models.ImageField(upload_to='emojis', null=False, blank=False)
+    name = models.CharField(max_length=20, blank=False, null=False)
+    description = models.CharField(max_length=50, blank=False, null=False)
+
