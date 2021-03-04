@@ -16,7 +16,7 @@
         {% else %}
         <p>(No image provided)</p>
         {% endif %}
-        <a href="{% url 'view_event' event_id=event.id %}">Click here to view.</a>
+        <a href="{% url 'view_event' pk=event.id %}">Click here to view.</a>
         <p>---</p>
     {% empty %}
         <p>There are no events.

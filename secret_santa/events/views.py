@@ -1,8 +1,9 @@
 from django.forms import formset_factory
+from django.http import Http404
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from events.forms import EventForm, EmailForm, EmailFormSet
 from events.models import Event
@@ -19,7 +20,8 @@ def create(request):
             event.owner = request.user
             event.save()
 
-            emails = [form["email"] for form in email_formset.cleaned_data if form and form["email"]]
+            emails = [form["email"] for form in email_formset.cleaned_data if
+                      form and form["email"]]
             participants = CustomUser.objects.all().filter(email__in=emails)
             for participant in participants:
                 event.participants.add(participant)
@@ -41,17 +43,22 @@ def create(request):
 
 
 class EventListView(ListView):
-
     model = Event
     allow_empty = True
     template_name = 'events/events.html'
 
     def get_queryset(self):
+        return Event.objects.filter(participants__email=self.request.user.email)
 
-       return Event.objects.filter(participants__email=self.request.user.email)
 
-def view_single(request, event_id: int):
-    return render(request, 'events/event_view.html', context={"id": event_id})
+class EventView(DetailView):
+    model = Event
+    context_object_name = 'event'
+    template_name = 'events/event_view.html'
+
+    def get_queryset(self):
+        qs = super(EventView, self).get_queryset()
+        return qs.filter(participants__email=self.request.user.email)
 
 
 def give_gift(request, event_id: int):
