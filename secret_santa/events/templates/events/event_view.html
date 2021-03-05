@@ -1,4 +1,9 @@
 {% extends 'core/navbar_base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'events/css/event_view.css' %}">
+{% endblock %}
 
 {% block content %}
 

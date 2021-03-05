@@ -12,11 +12,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
-            model_name='event',
+            model_name='events',
             name='time',
         ),
         migrations.AddField(
-            model_name='event',
+            model_name='events',
             name='game_length',
             field=models.IntegerField(default=3, validators=[django.core.validators.MinLengthValidator(3), django.core.validators.MaxLengthValidator(60)]),
             preserve_default=False,

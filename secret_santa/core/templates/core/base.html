@@ -5,15 +5,17 @@
     <meta charset="UTF-8">
     <title>Secret Santa</title>
     <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
+    {% block links %}
+    {% endblock %}
 </head>
 <body>
-    <div class="navbar">
-        {% block navbar %}
-        {% endblock %}
-    </div>
-    <div class="main-container">
-        {% block content %}
-        {%  endblock %}
+    <div class="body-wrapper">
+            {% block navbar %}
+            {% endblock %}
+        <div class="main-container">
+            {% block content %}
+            {%  endblock %}
+        </div>
     </div>
 </body>
 </html>

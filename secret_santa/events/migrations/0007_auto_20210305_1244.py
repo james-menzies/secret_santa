@@ -11,20 +11,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
-            model_name='event',
+            model_name='events',
             name='conclusion',
         ),
         migrations.RemoveField(
-            model_name='event',
+            model_name='events',
             name='status',
         ),
         migrations.AddField(
-            model_name='event',
+            model_name='events',
             name='activated_at',
             field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
-            model_name='event',
+            model_name='events',
             name='concluded_at',
             field=models.DateTimeField(null=True),
         ),

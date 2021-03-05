@@ -14,13 +14,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='event',
+            model_name='events',
             name='owner',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='owned_events', to='users.customuser'),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='event',
+            model_name='events',
             name='participants',
             field=models.ManyToManyField(related_name='events', to=settings.AUTH_USER_MODEL),
         ),

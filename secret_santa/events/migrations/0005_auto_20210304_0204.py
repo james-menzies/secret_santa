@@ -24,16 +24,16 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.RemoveField(
-            model_name='event',
+            model_name='events',
             name='active',
         ),
         migrations.AddField(
-            model_name='event',
+            model_name='events',
             name='conclusion',
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='event',
+            model_name='events',
             name='status',
             field=models.CharField(choices=[('I', 'Inactive'), ('A', 'Active'), ('C', 'Concluded')], default='I', max_length=1),
         ),
@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='event',
+            model_name='events',
             name='game_length',
             field=models.IntegerField(validators=[django.core.validators.MinValueValidator(3), django.core.validators.MaxValueValidator(60)]),
         ),

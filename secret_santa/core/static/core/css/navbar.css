@@ -1,0 +1,13 @@
+.navbar {
+    position: fixed;
+    width: 100%;
+}
+
+.main-container {
+    padding-top: 5em;
+
+}
+
+.body-wrapper {
+    display: block;
+}
