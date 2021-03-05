@@ -2,11 +2,10 @@ import random
 from datetime import datetime, timedelta
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Model
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 
 from events.forms import EventForm, EmailFormSet, GiftForm
 from events.models import Event, Gift
@@ -32,7 +31,7 @@ def create(request):
             event.participants.add(event.owner)
             event.save()
 
-            return redirect('view_event', event_id=event.id)
+            return redirect('view_event', pk=event.id)
         else:
             return redirect('create_event')
     else:
@@ -64,7 +63,17 @@ def event_view(request, pk: int):
 
     if event.status == Event.EventStatus.INACTIVE:
         participants = event.participants.all()
-        return render(request, 'events/event_view_inactive.html', {"participants":participants})
+        return render(request, 'events/event_view_inactive.html', {
+            "participants":participants,
+            "event": event,
+        })
+    elif event.status == Event.EventStatus.ACTIVE:
+
+        gift = event.gifts.filter(donor__email=request.user.email).get()
+        return render(request, 'events/event_view_active.html', {
+            "event": event,
+            "gift": gift,
+        })
 
     return render(request, 'events/event_view.html', {"event": event})
 

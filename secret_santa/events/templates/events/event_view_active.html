@@ -1,0 +1,10 @@
+{% extends 'events/event_view.html' %}
+{% load tz %}
+{% block status %}
+    {% if gift.emoji %}
+        <p>You're all set! Check back when it's time to open your present</p>
+        <p>{{ event.conclusion }}</p>
+    {% else %}
+        <a href="{% url 'give_gift' pk=event.id %}">Give your gift now!</a>
+    {% endif %}
+{% endblock %}

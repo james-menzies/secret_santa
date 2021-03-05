@@ -2,5 +2,12 @@
 
 {% block status %}
     <p>This event is currently not active. Check back soon.</p>
+    <h3>Current Participants</h3>
+    {% for participant in participants %}
+        <p>{{ participant.email }}</p>
+    {% endfor %}
+    {% if user.email == event.owner.email %}
+        <a href="{% url 'activate_event' pk=event.id %}">Activate Event</a>
+    {% endif %}
 
 {% endblock %}
