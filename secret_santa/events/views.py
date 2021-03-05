@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 from typing import List
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
@@ -48,31 +47,46 @@ def create(request):
 
 def edit_event(request, pk: int):
     qs = Event.objects.filter(owner__email=request.user.email).prefetch_related('participants')
-
     event: Event = get_object_or_404(qs, pk=pk)
-    event_form = EventForm(instance=event)
-    context = {"event_form": event_form}
-
-    emails = [user.email for user in event.participants.all()]
-    data = [{"email": email} for email in emails]
-    email_form = EmailFormSet(data=data, prefix='emails')
-    context["email_form"] = email_form
 
     if request.method == 'POST':
-        pass
+        email_formset = EmailFormSet(data=request.POST, prefix='emails')
+        event_form = EventForm(instance=event, data=request.POST)
+
+        if email_formset.is_valid() and event_form.is_valid():
+            updated_emails = [form["email"] for form in email_formset.cleaned_data if
+                              form and form["email"]]
+            updated_participants = CustomUser.objects.all().filter(email__in=updated_emails)
+            current_participants = event.participants.all()
+
+            for participant in current_participants:
+                if participant not in updated_participants:
+                    event.participants.remove(participant)
+
+            for participant in updated_participants:
+                if participant not in current_participants:
+                    event.participants.add(participant)
+
+            event.save()
+
+            return redirect('view_event', pk=pk)
+        else:
+            return redirect('edit_event', pk=pk)
+
+
     else:
-        if event.EventStatus == Event.EventStatus.INACTIVE:
+        if event.status == Event.EventStatus.INACTIVE:
+
+            event_form = EventForm(instance=event)
+            context = {"event_form": event_form}
+            emails = [user.email for user in event.participants.all()]
+            initial = [{"email": email} for email in emails]
+            email_form = EmailFormSet(initial=initial, prefix='emails')
+            context["email_formset"] = email_form
             return render(request, 'events/edit_event.html', context=context)
+
         else:
             return redirect('view_event', pk=pk)
-
-
-
-
-
-
-
-    return render(request, 'events/edit_event.html', context={"id": event_id})
 
 
 class EventListView(ListView):
@@ -149,7 +163,6 @@ def give_gift(request, pk: int):
             'form': form,
             'gift': gift,
         })
-
 
 
 def activate_event(request, pk: int):

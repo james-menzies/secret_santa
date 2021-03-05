@@ -8,6 +8,7 @@
     {% endfor %}
     {% if user.email == event.owner.email %}
         <a href="{% url 'activate_event' pk=event.id %}">Activate Event</a>
+        <a href="{% url 'edit_event' pk=event.id %}">Edit Event</a>
     {% endif %}
 
 {% endblock %}

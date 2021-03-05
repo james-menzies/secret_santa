@@ -1,5 +1,4 @@
-from django.contrib.admin import widgets
-from django.forms import ModelForm, forms, EmailField, formset_factory, DateTimeField
+from django.forms import ModelForm, forms, EmailField, formset_factory
 
 from events.models import Event, Gift
 
