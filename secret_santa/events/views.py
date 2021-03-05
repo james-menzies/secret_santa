@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from typing import List
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
@@ -43,6 +44,35 @@ def create(request):
             "email_formset": formset
         }
         return render(request, 'events/edit_event.html', context=context)
+
+
+def edit_event(request, pk: int):
+    qs = Event.objects.filter(owner__email=request.user.email).prefetch_related('participants')
+
+    event: Event = get_object_or_404(qs, pk=pk)
+    event_form = EventForm(instance=event)
+    context = {"event_form": event_form}
+
+    emails = [user.email for user in event.participants.all()]
+    data = [{"email": email} for email in emails]
+    email_form = EmailFormSet(data=data, prefix='emails')
+    context["email_form"] = email_form
+
+    if request.method == 'POST':
+        pass
+    else:
+        if event.EventStatus == Event.EventStatus.INACTIVE:
+            return render(request, 'events/edit_event.html', context=context)
+        else:
+            return redirect('view_event', pk=pk)
+
+
+
+
+
+
+
+    return render(request, 'events/edit_event.html', context={"id": event_id})
 
 
 class EventListView(ListView):
@@ -120,9 +150,6 @@ def give_gift(request, pk: int):
             'gift': gift,
         })
 
-
-def edit_event(request, event_id: int):
-    return render(request, 'events/edit_event.html', context={"id": event_id})
 
 
 def activate_event(request, pk: int):
