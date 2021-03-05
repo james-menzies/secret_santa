@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'events/event_view.html' %}
+{% block status %}
+    {% if user_gift.emoji %}
+        <p>Your gift from {{ user_gift.donor.email }} is a {{ user_gift.emoji.name }}!</p>
+        {% if user_gift.message %}
+            <p>Message: {{ user_gift.message }}</p>
+        {% else %}
+            <p>Message: {{ user_gift.emoji.description }}</p>
+        {% endif %}
+    {% else %}
+        <p>{{ user_gift.donor.email }} gave you coal! Boo!</p>
+    {% endif %}
 
-</body>
-</html>
+{% endblock %}

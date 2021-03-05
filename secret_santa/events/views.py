@@ -70,26 +70,29 @@ def event_view(request, pk: int):
         participants = event.participants.all()
         context["participants"] = participants
         return render(request, 'events/event_view_inactive.html', context=context)
-
     elif status == Event.EventStatus.ACTIVE:
-
         gift = event.gifts.filter(donor__email=request.user.email).get()
         context["gift"] = gift
         return render(request, 'events/event_view_active.html', context=context)
     else:
-
         def get_user_gift(gifts: List[Gift]) -> Gift:
             for gift in gifts:
-                if gift.opened and gift.recipient == request.user:
+                if not gift.opened and gift.recipient == request.user:
                     return gift
 
-        gifts = event.gifts.all()
-        user_gift = get_user_gift(gifts)
-        context["user_gift"] = user_gift
-        if user_gift:
-            return render(request, 'events/event_view_opening.html', context=context)
+        gifts = event.gifts \
+            .prefetch_related('donor') \
+            .prefetch_related('recipient').all()
 
-    return render(request, 'events/event_view.html', {"event": event})
+        user_gift = get_user_gift(gifts)
+        if user_gift:
+            context["user_gift"] = user_gift
+            user_gift.opened = True
+            user_gift.save()
+            return render(request, 'events/event_view_opening.html', context=context)
+        else:
+            context["gifts"] = gifts
+            return render(request, 'events/event_view_reveal.html', context=context)
 
 
 def give_gift(request, pk: int):
@@ -111,7 +114,6 @@ def give_gift(request, pk: int):
             form.save()
             return redirect('view_event', pk=pk)
     else:
-
         form = GiftForm(instance=gift)
         return render(request, 'events/edit_gift.html', context={
             'form': form,
