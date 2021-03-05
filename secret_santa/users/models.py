@@ -32,9 +32,10 @@ class CustomUser(AbstractUser):
     username = None
     email = models.EmailField("email", unique=True)
     profile_picture = models.ImageField(upload_to='profiles', null=True, blank=True)
+    display_name = models.CharField(max_length=20)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['display_name']
 
     objects = CustomUserManager()
 

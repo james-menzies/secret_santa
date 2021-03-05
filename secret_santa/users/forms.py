@@ -9,7 +9,8 @@ class UserRegistrationForm(UserCreationForm):
         model = CustomUser
         fields = ['email', 'profile_picture']
 
+
 class UserEditForm(ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['profile_picture']
+        fields = ['display_name', 'profile_picture', ]

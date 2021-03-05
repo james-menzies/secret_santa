@@ -2,7 +2,8 @@
 {% load static %}
 
 {% block content %}
-    <p>Profile of {{ user.email }}</p>
+    <p>Profile of {{ user.display_name }}</p>
+    <p>Email: {{ user.email }}</p>
     {% if user.profile_picture %}
     <div>
         <img src="{{ user.profile_picture.url }}" alt="">
