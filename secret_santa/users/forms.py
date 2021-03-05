@@ -1,4 +1,3 @@
-from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
@@ -10,3 +9,7 @@ class UserRegistrationForm(UserCreationForm):
         model = CustomUser
         fields = ['email', 'profile_picture']
 
+class UserEditForm(ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['profile_picture']
