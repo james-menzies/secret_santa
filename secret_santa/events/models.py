@@ -1,3 +1,6 @@
+from datetime import datetime
+
+import pytz
 from django.core.validators import MinValueValidator, \
     MaxValueValidator
 from django.db import models
@@ -18,15 +21,22 @@ class Event(models.Model):
     game_length = models.IntegerField(
         validators=(MinValueValidator(3), MaxValueValidator(60)))
     created_at = models.DateTimeField(auto_now_add=True)
-    conclusion = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(
-        max_length=1,
-        choices=EventStatus.choices,
-        default=EventStatus.INACTIVE,
-    )
+    activated_at = models.DateTimeField(null=True)
+    concluded_at = models.DateTimeField(null=True)
+
     revealed = models.BooleanField(default=True)
     owner = models.ForeignKey(CustomUser, related_name='owned_events', on_delete=models.CASCADE)
     participants = models.ManyToManyField(CustomUser, related_name='events')
+
+    @property
+    def status(self):
+
+        if not self.activated_at:
+            return Event.EventStatus.INACTIVE
+        elif datetime.now(pytz.utc) < self.concluded_at:
+            return Event.EventStatus.ACTIVE
+        else:
+            return Event.EventStatus.CONCLUDED
 
     def __str__(self):
         return f"<Event: {self.name}>"
@@ -53,4 +63,4 @@ class Gift(models.Model):
                                   related_name='+')
     emoji = models.ForeignKey(Emoji, on_delete=models.DO_NOTHING, null=True)
 
-
+    opened = models.BooleanField(default=False)

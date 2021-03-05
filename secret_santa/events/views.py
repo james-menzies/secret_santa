@@ -1,5 +1,6 @@
 import random
 from datetime import datetime, timedelta
+from typing import List
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseBadRequest
@@ -61,34 +62,48 @@ def event_view(request, pk: int):
     except ObjectDoesNotExist:
         return redirect('landing_page')
 
-    if event.status == Event.EventStatus.INACTIVE:
+    context = {"event": event}
+    # this is to prevent multiple datetime.now() calls
+    status = event.status
+
+    if status == Event.EventStatus.INACTIVE:
         participants = event.participants.all()
-        return render(request, 'events/event_view_inactive.html', {
-            "participants":participants,
-            "event": event,
-        })
-    elif event.status == Event.EventStatus.ACTIVE:
+        context["participants"] = participants
+        return render(request, 'events/event_view_inactive.html', context=context)
+
+    elif status == Event.EventStatus.ACTIVE:
 
         gift = event.gifts.filter(donor__email=request.user.email).get()
-        return render(request, 'events/event_view_active.html', {
-            "event": event,
-            "gift": gift,
-        })
+        context["gift"] = gift
+        return render(request, 'events/event_view_active.html', context=context)
+    else:
+
+        def get_user_gift(gifts: List[Gift]) -> Gift:
+            for gift in gifts:
+                if gift.opened and gift.recipient == request.user:
+                    return gift
+
+        gifts = event.gifts.all()
+        user_gift = get_user_gift(gifts)
+        context["user_gift"] = user_gift
+        if user_gift:
+            return render(request, 'events/event_view_opening.html', context=context)
 
     return render(request, 'events/event_view.html', {"event": event})
 
+
 def give_gift(request, pk: int):
-    qs = Gift.objects\
-        .filter(event_id=pk)\
-        .filter(event__status=Event.EventStatus.ACTIVE)\
-        .filter(donor__email=request.user.email)\
+    qs = Gift.objects \
+        .filter(event_id=pk) \
+        .filter(donor__email=request.user.email) \
         .filter(emoji_id__isnull=True)
 
     try:
         gift = qs.get()
-    except ObjectDoesNotExist:
+        if gift.event.status != Event.EventStatus.ACTIVE:
+            raise ValueError()
+    except (ObjectDoesNotExist, ValueError):
         return redirect('view_event', pk=pk)
-
 
     if request.method == 'POST':
         form = GiftForm(data=request.POST, instance=gift)
@@ -110,7 +125,7 @@ def edit_event(request, event_id: int):
 
 def activate_event(request, pk: int):
     qs = Event.objects.filter(owner__email=request.user.email)
-    event = get_object_or_404(qs, pk=pk)
+    event: Event = get_object_or_404(qs, pk=pk)
     participants = list(event.participants.all())
 
     if len(participants) < 3 or event.status != Event.EventStatus.INACTIVE:
@@ -127,11 +142,9 @@ def activate_event(request, pk: int):
         gifts.append(gift)
 
     Gift.objects.bulk_create(gifts)
-    event.status = Event.EventStatus.ACTIVE
-    conclusion = datetime.now() + timedelta(minutes=event.game_length)
-    event.conclusion = conclusion
-
-    # todo create async task that concludes event
+    event.activated_at = datetime.now()
+    conclusion = event.activated_at + timedelta(minutes=event.game_length)
+    event.concluded_at = conclusion
 
     event.save()
     return redirect('view_event', pk=pk)
