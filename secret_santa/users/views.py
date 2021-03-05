@@ -45,7 +45,10 @@ def register(request):
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
-        pass
+        form = UserEditForm(data=request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
     else:
         form = UserEditForm(instance=request.user)
         context = {"form": form}
