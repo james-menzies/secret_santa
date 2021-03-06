@@ -106,7 +106,7 @@ def event_view(request, pk: int):
     except ObjectDoesNotExist:
         return redirect('landing_page')
 
-    context = {"events": event}
+    context = {"event": event}
     # this is to prevent multiple datetime.now() calls
     status = event.status
 

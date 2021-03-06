@@ -25,8 +25,10 @@ def log_out(request):
 
 @login_required
 def profile(request):
-
-    return render(request, template_name='users/profile.html')
+    context = {
+        "title": "My Profile"
+    }
+    return render(request, template_name='users/profile.html', context=context)
 
 
 def register(request):

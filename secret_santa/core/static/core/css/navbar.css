@@ -1,13 +1,27 @@
 .navbar {
     position: fixed;
     width: 100%;
+    z-index: 1;
 }
 
-.main-container {
-    padding-top: 5em;
+div.main-container {
+    margin-top: 5em;
+    min-height: 100%;
+    flex-grow: 1;
+    padding: 4em 2em 2em 2em;
 
+
+}
+
+h1 {
+    padding-top: 3em;
+    text-align: center;
 }
 
 .body-wrapper {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 100vh;
+
 }

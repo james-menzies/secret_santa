@@ -1,9 +1,17 @@
 {% extends 'core/base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static '/users/css/register.css'%}">
+{% endblock %}
 
 
 {% block content %}
-<div class="row">
+<div class="row align-items-center">
+    <h1 class="col-md">Create an Account</h1>
+    {% csrf_token %}
+
     {% crispy form %}
 </div>
 
