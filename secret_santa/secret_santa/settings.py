@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'crispy_forms',
+
     'users',
     'core',
     'events',
@@ -120,3 +122,5 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_URL = reverse_lazy('login')
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

@@ -40,7 +40,7 @@ def register(request):
 
             return redirect(reverse('login'))
         else:
-            return redirect('register')
+            return render(request, 'users/register.html', context={"form": form})
 
 @login_required
 def edit_profile(request):
