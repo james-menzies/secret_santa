@@ -93,6 +93,9 @@ class EventListView(ListView):
     model = Event
     allow_empty = True
     template_name = 'events/events.html'
+    extra_context = {
+        "title": "My Events"
+    }
 
     def get_queryset(self):
         return Event.objects.filter(participants__email=self.request.user.email)

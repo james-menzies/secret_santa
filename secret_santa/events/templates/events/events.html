@@ -1,26 +1,36 @@
 {% extends 'core/navbar_base.html' %}
+{% load static %}
+{% block links %}
+    <link rel="stylesheet" href="{% static '/events/css/events.css' %}">
+{% endblock %}
 
 {% block content %}
-
-    <h1>Event List </h1>
-    {% for event in object_list %}
-        <p>Name: {{ event.name }}</p>
-        <p>Length: {{ event.game_length }} Minutes</p>
-        {% if event.description %}
-            <p>Description: {{ event.description }}</p>
-        {% else %}
-            <p>(No description provided)</p>
-        {% endif %}
-        {% if event.image %}
-        <img src="{{ event.image.url }}" alt="">
-        {% else %}
-        <p>(No image provided)</p>
-        {% endif %}
-        <a href="{% url 'view_event' pk=event.id %}">Click here to view.</a>
-        <p>---</p>
-    {% empty %}
-        <p>There are no events.
-            <a href="{% url 'create_event' %}">Make one now!</a>
-        </p>
-    {% endfor %}
+    {% if object_list %}
+        {% for event in object_list %}
+            <a href="{% url 'view_event' pk=event.id %}" class="media my-5 p-2">
+                {% if event.image %}
+                    <img src="{{ event.image.url }}" alt="" class="img-thumbnail mr-3">
+                {% else %}
+                    <img src="{% static '/events/images/event_placeholder.png' %}" class="mr-3 img-thumbnail" alt="">
+                {% endif %}
+                <div class="media-body">
+                    <h4>
+                        {{ event.name }} ({{ event.status.name | title }})
+                    </h4>
+                    <p>
+                        <strong>Creator: {{ event.owner.display_name }}</strong>
+                    </p>
+                    {% if event.description %}
+                        <p>{{ event.description }}</p>
+                    {% else %}
+                        <p>
+                            (No description Provided)
+                        </p>
+                    {% endif %}
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <h4 class="placeholder-text">You currently don't have any events... <a href="{% url 'create_event' %}">create one now!</a></h4>
+    {% endif %}
 {% endblock %}

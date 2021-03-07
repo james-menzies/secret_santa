@@ -11,7 +11,6 @@
 
 
 
-        {% form | crispy %}
         {% for radio in form.emoji %}
             <img src="{{ radio.choice_label.image.url }}" alt="">
             <p>{{ radio.choice_label.name }}</p>
