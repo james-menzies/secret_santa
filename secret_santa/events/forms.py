@@ -1,3 +1,5 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Field, Layout, Column
 from django.forms import ModelForm, forms, EmailField, formset_factory, ModelChoiceField, \
     RadioSelect
 from django.utils.safestring import mark_safe
@@ -23,7 +25,23 @@ class ImageChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj
 
+class RadioImageControl(Field):
+    template = 'image_radio.html'
+
+
 class GiftForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'col-md-6'
+        self.helper.layout = Layout(
+            Column(
+                'message'
+            ),
+            RadioImageControl('emoji')
+
+        )
+
     class Meta:
         model = Gift
         fields = ['emoji', 'message']

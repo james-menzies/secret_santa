@@ -1,14 +1,13 @@
 {% extends 'events/event_view.html' %}
 
 {% block status %}
-    <p>This event is currently not active. Check back soon.</p>
-    <h3>Current Participants</h3>
-    {% for participant in participants %}
-        <p>{{ participant.email }}</p>
-    {% endfor %}
     {% if user.email == event.owner.email %}
-        <a href="{% url 'activate_event' pk=event.id %}">Activate Event</a>
-        <a href="{% url 'edit_event' pk=event.id %}">Edit Event</a>
+        <h6 class="py-3">You have not activated this event.</h6>
+        <div class="button-bar">
+            <a class="btn-dark btn-lg btn" href="{% url 'activate_event' pk=event.id %}">Activate Event</a>
+            <a class="btn-dark btn btn-lg " href="{% url 'edit_event' pk=event.id %}">Edit Event</a>
+        </div>
+    {% else %}
+        <p>This event is currently not active. Check back soon.</p>
     {% endif %}
-
 {% endblock %}
