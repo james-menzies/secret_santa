@@ -1,28 +1,41 @@
 {% extends 'core/navbar_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static '/events/css/edit-event.css' %}">
+
+{% endblock %}
 
 {% block content %}
-
-    {% if id %}
-        <h1>Editing event no: {{ id }}</h1>
-    {% else %}
-        <h1>New Event</h1>
-    {% endif %}
-    <form action="" method="post" id="form-container" enctype="multipart/form-data">
+    <form class="row" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ event_form.as_p }}
-        {{ email_formset.management_form }}
-        <p>Emails of Invitees</p>
-        {% for form in email_formset %}
+        <div class="d-none hidden-form-elements">
             <div class="email-form">
-                {{ form.as_p }}
+                {% crispy email_formset.empty_form email_formset_helper %}
             </div>
-        {% endfor %}
-        <button id="add-form" type="button">Add another</button>
-        <br>
-        <input type="submit" value="Submit">
+            {{ email_formset.management_form }}
+        </div>
+        <div class="col-md-4">
+            {% crispy event_form %}
+        </div>
+        <div class="col-md-8" id="form-container">
+            {% for form in email_formset %}
+                <div class="email-form">
+                    {% crispy form email_formset_helper %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="button-bar">
+            <button id="add-form" type="button" class="mr-3 btn-lg btn-primary">Add Email</button>
+            <br>
+            <input type="submit" value="Submit" class="btn-dark btn-lg">
+        </div>
     </form>
     <script>
         let emailForm = document.getElementsByClassName("email-form")
+        let hiddenEmailForm = document.querySelector(".hidden-form-elements .email-form")
         let container = document.getElementById("form-container")
         let addButton = document.getElementById("add-form")
         let totalForms = document.getElementById("id_emails-TOTAL_FORMS")
@@ -36,13 +49,15 @@
         function addForm(e) {
             e.preventDefault()
 
-            let newForm = emailForm[0].cloneNode(true)
+            let newForm = hiddenEmailForm.cloneNode(true)
 
             numEmails++
-            newForm.innerHTML = newForm.innerHTML.replaceAll('emails-0-', `emails-${numEmails}-`)
-            container.insertBefore(newForm, addButton)
+            newForm.innerHTML = newForm.innerHTML.replaceAll('__prefix__', numEmails)
+            newForm.get
+            container.append(newForm)
 
             totalForms.setAttribute('value', `${numEmails + 1}`)
+
             if (numEmails + 1 >= maxForms) {
                 addButton.disabled = true
             }

@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from django.views.generic import ListView
 
-from events.forms import EventForm, EmailFormSet, GiftForm
+from events.forms import EventForm, EmailFormSet, GiftForm, EmailFormSetHelper
 from events.models import Event, Gift
 from users.models import CustomUser
 
@@ -40,7 +40,8 @@ def create(request):
         formset = EmailFormSet(prefix='emails')
         context = {
             "event_form": event_form,
-            "email_formset": formset
+            "email_formset": formset,
+            "email_formset_helper": EmailFormSetHelper()
         }
         return render(request, 'events/edit_event.html', context=context)
 
@@ -48,6 +49,10 @@ def create(request):
 def edit_event(request, pk: int):
     qs = Event.objects.filter(owner__email=request.user.email).prefetch_related('participants')
     event: Event = get_object_or_404(qs, pk=pk)
+    context = {
+        "title": f"Editing {event.name}",
+        "email_formset_helper": EmailFormSetHelper()
+    }
 
     if request.method == 'POST':
         email_formset = EmailFormSet(data=request.POST, prefix='emails')
@@ -71,17 +76,19 @@ def edit_event(request, pk: int):
 
             return redirect('view_event', pk=pk)
         else:
-            return redirect('edit_event', pk=pk)
+            context["email_formset"] = email_formset
+            context["event_form"] = event_form
+            return render(request, 'events/edit_event.html', context=context)
 
 
     else:
         if event.status == Event.EventStatus.INACTIVE:
 
             event_form = EventForm(instance=event)
-            context = {"event_form": event_form}
             emails = [user.email for user in event.participants.all()]
             initial = [{"email": email} for email in emails]
             email_form = EmailFormSet(initial=initial, prefix='emails')
+            context["event_form"] = event_form
             context["email_formset"] = email_form
             return render(request, 'events/edit_event.html', context=context)
 
