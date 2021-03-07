@@ -53,6 +53,9 @@ def edit_profile(request):
             return redirect('profile')
     else:
         form = UserEditForm(instance=request.user)
-        context = {"form": form}
+        context = {
+            "form": form,
+            "title": "Edit Profile"
+                   }
         return render(request, 'users/edit_profile.html', context=context)
 

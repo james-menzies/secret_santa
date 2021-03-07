@@ -1,11 +1,10 @@
 {% extends 'core/navbar_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block links %}
+<link rel="stylesheet" href="{% static 'users/css/edit_profile.css' %}">
+{% endblock %}
 
 {% block content %}
-    <h1>Edit Profile</h1>
-    <p>Form of user: {{ user.email }}</p>
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Change">
-    </form>
+    {% crispy form %}
 {% endblock %}
