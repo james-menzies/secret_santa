@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 COPY secret_santa .
 
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "-w", "2", "--access-logfile", "-", "secret_santa.wsgi:application"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "-w", "2", "--access-logfile", "-", "secret_santa.wsgi:application", "--preload"]
