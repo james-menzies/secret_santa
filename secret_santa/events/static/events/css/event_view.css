@@ -10,9 +10,19 @@
 }
 
 
-#gift-reveal-row .card-img-top {
-    width: 125px;
-    height: 125px;
+.gift-reveal-row img, .media .img-thumbnail {
+    width: 75px;
+    height: 75px;
     object-fit: cover;
 }
+
+#gift-reveal-row p {
+    font-size: 8px;
+}
+
+.gift-message {
+    font-style: italic;
+}
+
+
 
