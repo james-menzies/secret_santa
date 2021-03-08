@@ -2,6 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block links %}
+    <link rel="stylesheet" href="{% static '/events/css/edit-gift.css' %}">
+
+{% endblock %}
+
 {% block content %}
 
     <div class="row">
@@ -14,6 +19,7 @@
             {% endif %}
         </div>
         {% crispy form %}
+
     </div>
 
 {% endblock %}

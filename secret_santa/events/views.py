@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from typing import List
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
@@ -105,7 +106,10 @@ class EventListView(ListView):
     }
 
     def get_queryset(self):
-        return Event.objects.filter(participants__email=self.request.user.email)
+        qs = Event.objects.filter(participants__email=self.request.user.email)
+        qs = qs.filter(Q(owner__email=self.request.user.email) | Q(concluded_at__isnull=False))
+        qs = qs.order_by('-concluded_at')
+        return qs
 
 
 def event_view(request, pk: int):

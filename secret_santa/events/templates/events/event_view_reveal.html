@@ -1,7 +1,17 @@
 {% extends 'events/event_view.html' %}
+
 {% block status %}
     {% for gift in gifts %}
-    <p>{{ gift.donor.email }} gave {{ gift.recipient.email }} a {{ gift.emoji.name }}</p>
+        {% if gift.emoji %}
+            <article id="gift-reveal-row" class="d-flex justify-content-around">
+
+                <div class="card border-dark">
+                    <img src="{{ gift.donor.profile_picture.url }}" alt="" class="card-img-top">
+                    <p class="card-title">{{ gift.donor.display_name }}</p>
+                </div>
+
+            </article>
+        {% endif %}
     {% endfor %}
 
 {% endblock %}

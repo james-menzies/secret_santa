@@ -9,6 +9,7 @@ div.main-container {
     min-height: 100%;
     flex-grow: 1;
     padding: 4em 2em 2em 2em;
+    max-width: 950px;
 
 
 }

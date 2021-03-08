@@ -1,5 +1,5 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field, Layout, Column
+from crispy_forms.layout import Field, Layout, Column, Row, Submit
 from django.forms import ModelForm, forms, EmailField, formset_factory, ModelChoiceField, \
     RadioSelect
 from django.utils.safestring import mark_safe
@@ -12,7 +12,7 @@ class EventForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'col-md-6'
-        self.helper.layout = Layout (
+        self.helper.layout = Layout(
             'name',
             'game_length',
             'image',
@@ -31,6 +31,7 @@ class EmailForm(forms.Form):
 
 EmailFormSet = formset_factory(EmailForm, extra=1, min_num=4, max_num=9, validate_max=True)
 
+
 class EmailFormSetHelper(FormHelper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -43,6 +44,7 @@ class ImageChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
         return obj
 
+
 class RadioImageControl(Field):
     template = 'image_radio.html'
 
@@ -53,11 +55,9 @@ class GiftForm(ModelForm):
         self.helper = FormHelper()
         self.helper.form_class = 'col-md-6'
         self.helper.layout = Layout(
-            Column(
-                'message'
-            ),
-            RadioImageControl('emoji')
-
+            'message',
+            RadioImageControl('emoji'),
+            Submit("submit", "Give", )
         )
 
     class Meta:

@@ -1,10 +1,10 @@
 {% load crispy_forms_field %}
 
 <div class="form-group">
-    <div class="image-radio-select d-flex justify-content-around">
+    <div class="image-radio-select d-flex flex-wrap justify-content-around">
 
         {% for radio in field %}
-            <div class="image-radio-option" style="width: 30%">
+            <div class="image-radio-option py-3">
                 <label for="{{ radio.id_for_label }}">
                     {{ radio.tag }}
                     {{ radio.choice_label.name }}
