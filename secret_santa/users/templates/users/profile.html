@@ -10,7 +10,7 @@
         {% if user.profile_picture %}
         <img src="{{ user.profile_picture.url }}" alt="" class="mr-3">
         {% else %}
-        <img src="{% static 'users/images/profile_placeholder.png' %}" alt="" class="mr-3">
+        <img src="{% static 'users/images/profile_placeholder.png' %}" alt="" class="mr-3 img-thumbnail">
         {% endif %}
         <div class="media-body align-self-end">
             <p><strong>Email: </strong>{{ user.email }}</p>

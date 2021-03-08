@@ -14,8 +14,7 @@
     </div>
     <div class="row form-signin align-items-end">
 
-        <img class="col-sm img-responsive" src="{% static 'core/images/xmas_tree.png' %}" alt="">
-        <form class="col-sm" method="post" action="{% url 'login' %}">
+        <form class="card p-4 col-sm" method="post" action="{% url 'login' %}">
             <h3>Please Sign In</h3>
             {% csrf_token %}
             {{ form | crispy }}

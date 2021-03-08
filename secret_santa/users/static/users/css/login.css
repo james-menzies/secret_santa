@@ -1,5 +1,5 @@
 .form-signin {
-    max-width: 600px;
+    max-width: 400px;
     margin: auto;
 }
 
@@ -9,5 +9,7 @@
 }
 
 #heading-section {
-    margin-bottom: 8rem;
+    margin: 0 auto 8rem auto;
+    display: inline-block;
 }
+
