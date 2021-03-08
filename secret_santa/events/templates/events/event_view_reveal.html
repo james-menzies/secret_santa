@@ -12,9 +12,9 @@
                 {% else %}
                     <img src="{% static 'users/images/profile_placeholder.png' %}" alt="" class="card-img-top">
                 {% endif %}
-                <img src="{% static '/events/images/arrow.png' %}" alt="">
+                <img src="{% static 'events/images/arrow.png' %}" alt="">
                 <img src="{{ gift.emoji.image.url }}" alt="" class="img-thumbnail">
-                <img src="{% static '/events/images/arrow.png' %}" alt="">
+                <img src="{% static 'events/images/arrow.png' %}" alt="">
                 {% if gift.recipient.profile_picture %}
                     <img src="{{ gift.recipient.profile_picture.url }}" alt="" class="img-thumbnail">
                 {% else %}
@@ -53,7 +53,7 @@
                     {% if gift.donor.profile_picture %}
                         <img class="img-thumbnail" src="{{ gift.donor.profile_picture.url }}" alt="">
                     {% else %}
-                        <img src="{% static '/users/images/profile_placeholder.png' %}" alt="" class="img-thumbnail">
+                        <img src="{% static 'users/images/profile_placeholder.png' %}" alt="" class="img-thumbnail">
                     {% endif %}
                     <h6 class="align-self-end ml-3">{{ gift.donor.display_name }}</h6>
 
