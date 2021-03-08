@@ -11,17 +11,17 @@
     <h1>Welcome to Secret Santa!</h1>
     <p>Click one of the options below to get started.</p>
     <div class="card-container flex-row d-flex justify-content-around">
-        <div class="card border-dark col-md-3">
+        <div class="card border-primary col-md-3">
             <img src="{% static 'core/images/profile.png' %}" alt="">
-            <a class="btn btn-dark stretched-link mb-2" href="{% url 'profile' %}">MY PROFILE</a>
+            <a class="btn btn-primary stretched-link mb-2" href="{% url 'profile' %}">MY PROFILE</a>
         </div>
-        <div class="card border-dark col-md-3">
+        <div class="card border-primary col-md-3">
             <img src="{% static 'core/images/calendar.png' %}" alt="">
-            <a class="btn btn-dark stretched-link mb-2" href="{% url 'view_all_events' %}">MY EVENTS</a>
+            <a class="btn btn-primary stretched-link mb-2" href="{% url 'view_all_events' %}">MY EVENTS</a>
         </div>
-        <div class="card border-dark col-md-3">
+        <div class="card border-primary col-md-3">
             <img src="{% static 'core/images/add_event.png' %}" alt="">
-            <a class="btn btn-dark stretched-link mb-2" href="{% url 'create_event' %}">CREATE NEW EVENT</a>
+            <a class="btn btn-primary stretched-link mb-2" href="{% url 'create_event' %}">CREATE EVENT</a>
         </div>
     </div>
 {% endblock %}

@@ -4,8 +4,8 @@
     {% if user.email == event.owner.email %}
         <h6 class="py-3">You have not activated this event.</h6>
         <div class="button-bar">
-            <a class="btn-dark btn-lg btn" href="{% url 'activate_event' pk=event.id %}">Activate Event</a>
-            <a class="btn-dark btn btn-lg " href="{% url 'edit_event' pk=event.id %}">Edit Event</a>
+            <a class="btn btn-primary mr-3" href="{% url 'activate_event' pk=event.id %}">Activate</a>
+            <a class="btn btn-primary" href="{% url 'edit_event' pk=event.id %}">Edit Event</a>
         </div>
     {% else %}
         <p>This event is currently not active. Check back soon.</p>
