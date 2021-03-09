@@ -29,7 +29,7 @@ class EmailForm(forms.Form):
     email = EmailField(label='Email', required=False)
 
 
-EmailFormSet = formset_factory(EmailForm, extra=1, max_num=9, validate_max=True)
+EmailFormSet = formset_factory(EmailForm, extra=1, max_num=13, validate_max=True)
 
 
 class EmailFormSetHelper(FormHelper):

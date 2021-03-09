@@ -8,4 +8,5 @@
         <h5>You haven't given your gift yet</h5>
         <a href="{% url 'give_gift' pk=event.id %}">Give your gift now!</a>
     {% endif %}
+    <h6>Reveal in: {{ event.concluded_at | timeuntil }}</h6>
 {% endblock %}

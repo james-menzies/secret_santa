@@ -158,7 +158,7 @@ def event_view(request, pk: int):
             return render(request, 'events/event_view_opening.html', context=context)
         else:
             context["gifts"] = gifts
-            return render(request, 'events/event_view_opening.html', context=context)
+            return render(request, 'events/event_view_reveal.html', context=context)
 
 
 def give_gift(request, pk: int):
