@@ -16,17 +16,24 @@ Anyone who's after a bit of fun! This game is probably best played amongst frien
 
 ## Tech Stack
 
-* Python + Django: Serves as the application layer for the program. Handles everything from processing web endpoint requests, and acts as the ORM between the application and data layers.
+* Amazon Elastic Container Service: This manages all running instances of the application into a cluster so updates can pushed out automatically.
 
-* AWS Elastic Beanstalk: Provisions the web servers containing the Django application by automatically configuring an auto-scaling group of EC2 instances. 
+* Github Actions: This allows me to run my unit tests on non master branches as well as push automatically to ECS when a new version of the application is added.
 
 * S3 / Cloudfront: Where static content and user uploaded images are stored. S3 physically stores the media, and Cloudfront provisions it through caching and duplicating in edge locations close to the user.
 
-* Amazon Simple Email Service: Responsible for handling email communications to users. This is of particular importance for inviting new users to join, as well as notifying them when they've been added to an event, or when it's present opening time.
+* Postgres: The underlying implementation of the data layer is a PostgreQL database, which is provisioned by an Amazon EC2 instance.
 
-* Postgres / RDS: The underlying implementation of the data layer is a PostgreQL database, which is provisioned by an Amazon EC2 instance.
+* Docker and Docker Compose: The container technology used for the application. For local development and testing, Docker Compose is used to allow the separate elements of the application (the web server and database) to be orchestrated on a single machine.
 
-* Celery: This library is used to handle asynchronous background tasks. Celery ensures that long-running tasks (such as dispatching bulk emails) don't lock the request thread.
+* Python + Django: Serves as the application layer for the program. Handles everything from processing web endpoint requests, and acts as the ORM between the application and data layers.
+
+### Django and Python Libraries
+
+* django-storages: This allows for S3 and Cloudfront integration with minimal configuration.
+
+* django-crispy-forms: A utility library to help render forms consistently as well as provide a more streamlined mechanism for form layouts.
+
 
 ## Project Management
 
@@ -35,5 +42,9 @@ For the delivery of the project, I've divided the development process into 4 dis
 ## CI / CD Pipeline
 
 For this application an extensive CI / CD pipeline has been devised. Read more about it [HERE](https://github.com/redbrickhut/secret_santa/wiki/CI---CD).
+
+## Testing
+
+The process of both automated and manual testing of the application is described [HERE](https://github.com/redbrickhut/secret_santa/wiki/Testing)
 
 
