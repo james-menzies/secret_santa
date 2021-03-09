@@ -5,6 +5,7 @@
         <p>You're all set! Check back when it's time to open your present</p>
         <p>{{ event.conclusion }}</p>
     {% else %}
+        <h5>You haven't given your gift yet</h5>
         <a href="{% url 'give_gift' pk=event.id %}">Give your gift now!</a>
     {% endif %}
 {% endblock %}

@@ -7,9 +7,11 @@
 
 
 {% block content %}
-    <p>Welcome, {{ user.display_name }}. <a href="{% url 'logout' %}">Log out</a></p>
-    <h1>Welcome to Secret Santa!</h1>
-    <p>Click one of the options below to get started.</p>
+    <div class="card p-2">
+        <p>Welcome, {{ user.display_name }}. <a href="{% url 'logout' %}">Log out</a></p>
+        <h1>Welcome to Secret Santa!</h1>
+        <p>Click one of the options below to get started.</p>
+    </div>
     <div class="card-container flex-row d-flex justify-content-around">
         <div class="card border-primary col-md-3">
             <img src="{% static 'core/images/profile.png' %}" alt="">

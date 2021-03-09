@@ -29,7 +29,7 @@ class EmailForm(forms.Form):
     email = EmailField(label='Email', required=False)
 
 
-EmailFormSet = formset_factory(EmailForm, extra=1, min_num=4, max_num=9, validate_max=True)
+EmailFormSet = formset_factory(EmailForm, extra=1, max_num=9, validate_max=True)
 
 
 class EmailFormSetHelper(FormHelper):
@@ -56,7 +56,7 @@ class GiftForm(ModelForm):
         self.helper.form_class = 'col-md-6'
         self.helper.layout = Layout(
             'message',
-            RadioImageControl('emoji'),
+            RadioImageControl('emoji',),
             Submit("submit", "Give", )
         )
 

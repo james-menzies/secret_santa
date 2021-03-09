@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.contrib import messages
+from django.contrib.messages import constants
+from django.contrib.messages.context_processors import messages
 from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
@@ -125,3 +128,9 @@ AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_URL = reverse_lazy('login')
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+MESSAGE_TAGS = {
+    constants.SUCCESS: 'alert alert-primary',
+    constants.ERROR: 'alert alert-danger',
+    constants.WARNING: 'alert alert-warning'
+}

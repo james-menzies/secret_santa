@@ -6,3 +6,8 @@
 #submit-id-submit {
     width: 300px;
 }
+
+#recipient-view {
+    max-width: 300px;
+    text-align: center;
+}

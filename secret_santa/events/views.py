@@ -2,9 +2,9 @@ import random
 from datetime import datetime, timedelta
 from typing import List
 
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 # Create your views here.
 from django.views.generic import ListView
@@ -35,11 +35,18 @@ def create(request):
 
             return redirect('view_event', pk=event.id)
         else:
-            return redirect('create_event')
+            context = {
+                'email_formset': email_formset,
+                'email_formset_helper': EmailFormSetHelper(),
+                'event_form': event_form,
+                'title': "New Event"
+            }
+            return render(request, 'events/edit_event.html', context=context)
     else:
         event_form = EventForm()
         formset = EmailFormSet(prefix='emails')
         context = {
+            "title": "New Event",
             "event_form": event_form,
             "email_formset": formset,
             "email_formset_helper": EmailFormSetHelper()
@@ -186,7 +193,8 @@ def activate_event(request, pk: int):
     participants = list(event.participants.all())
 
     if len(participants) < 3 or event.status != Event.EventStatus.INACTIVE:
-        return HttpResponseBadRequest()
+        messages.error(request, "You must have three participants as a minimum to activate event")
+        return redirect('view_event', pk=pk)
 
     random.shuffle(participants)
     gifts = []

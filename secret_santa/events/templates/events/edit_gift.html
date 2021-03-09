@@ -10,13 +10,14 @@
 {% block content %}
 
     <div class="row">
-        <div class="col-md-6">
-            <p>Giving gift to: {{ gift.recipient.display_name }}</p>
+        <div class="col-md-6" id="recipient-view">
+            <h4>Giving gift to: </h4>
             {% if gift.recipient.profile_picture %}
                 <img src="{{ gift.recipient.profile_picture.url }}" alt="">
             {% else %}
                 <img class="img-thumbnail" src="{% static 'users/images/profile_placeholder.png' %}" alt="">
             {% endif %}
+            <h4>{{ gift.recipient.display_name }}</h4>
         </div>
         {% crispy form %}
 
