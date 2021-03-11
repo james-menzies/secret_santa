@@ -2,6 +2,11 @@
 
 This application is a micro-game designed purely around creating the social interaction of Secret Santa, but in a virtualized, online environment. All users involved in an event can send an receive an emoji gift under the guise of random mystery. What fun!
 
+## Links
+
+* [Old Readme](old_README.md)
+* [Deployed Website](https://virtualsecretsanta.club)
+* [This REPO](https://github.com/redbrickhut/secret_santa)
 
 
 ![](https://d3lw8livlfth9o.cloudfront.net/static/core/images/background_footer.png)
