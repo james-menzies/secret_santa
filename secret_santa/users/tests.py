@@ -35,5 +35,5 @@ class AuthTest(TestCase):
         c.login(username='user0@test.com', password='password0')
 
         for endpoint in self.endpoints[:-2]:
-            response = c.get('/')
-            self.assertTrue(200, response.status_code)
+            response = c.get(endpoint)
+            self.assertEqual(200, response.status_code)

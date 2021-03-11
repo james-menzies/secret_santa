@@ -1,5 +1,27 @@
 [
   {
+    "model": "events.event",
+    "pk": 6,
+    "fields": {
+      "name": "My Event",
+      "description": "",
+      "image": "",
+      "game_length": 20,
+      "created_at": "2021-03-11T04:30:09.043Z",
+      "activated_at": null,
+      "concluded_at": null,
+      "revealed": true,
+      "owner": 18,
+      "participants": [
+        18,
+        19,
+        20,
+        21,
+        22
+      ]
+    }
+  },
+  {
     "model": "events.emoji",
     "pk": 1,
     "fields": {
