@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from typing import List
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
@@ -13,7 +14,7 @@ from events.forms import EventForm, EmailFormSet, GiftForm, EmailFormSetHelper
 from events.models import Event, Gift
 from users.models import CustomUser
 
-
+@login_required
 def create(request):
     if request.method == 'POST':
         event_form = EventForm(data=request.POST, files=request.FILES)
@@ -53,7 +54,7 @@ def create(request):
         }
         return render(request, 'events/edit_event.html', context=context)
 
-
+@login_required
 def edit_event(request, pk: int):
     qs = Event.objects.filter(owner__email=request.user.email).prefetch_related('participants')
     event: Event = get_object_or_404(qs, pk=pk)
@@ -118,7 +119,7 @@ class EventListView(ListView):
         qs = qs.order_by('-concluded_at')
         return qs
 
-
+@login_required
 def event_view(request, pk: int):
     qs = Event.objects.filter(id=pk).filter(participants__email=request.user.email)
 
@@ -160,7 +161,7 @@ def event_view(request, pk: int):
             context["gifts"] = gifts
             return render(request, 'events/event_view_reveal.html', context=context)
 
-
+@login_required
 def give_gift(request, pk: int):
     qs = Gift.objects \
         .filter(event_id=pk) \
@@ -186,7 +187,7 @@ def give_gift(request, pk: int):
             'gift': gift,
         })
 
-
+@login_required
 def activate_event(request, pk: int):
     qs = Event.objects.filter(owner__email=request.user.email)
     event: Event = get_object_or_404(qs, pk=pk)

@@ -1,0 +1,20 @@
+[
+  {
+    "model": "events.emoji",
+    "pk": 1,
+    "fields": {
+      "image": "emojis/eggplant.png",
+      "name": "Eggplant",
+      "description": "blah blah"
+    }
+  },
+  {
+    "model": "events.emoji",
+    "pk": 2,
+    "fields": {
+      "image": "emojis/diamond.png",
+      "name": "Diamond",
+      "description": "A sparkly diamond"
+    }
+  }
+]

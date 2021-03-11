@@ -21,8 +21,8 @@ class Event(models.Model):
     game_length = models.IntegerField(
         validators=(MinValueValidator(3), MaxValueValidator(60)))
     created_at = models.DateTimeField(auto_now_add=True)
-    activated_at = models.DateTimeField(null=True)
-    concluded_at = models.DateTimeField(null=True)
+    activated_at = models.DateTimeField(null=True, blank=True)
+    concluded_at = models.DateTimeField(null=True, blank=True)
 
     revealed = models.BooleanField(default=True)
     owner = models.ForeignKey(CustomUser, related_name='owned_events', on_delete=models.CASCADE)
