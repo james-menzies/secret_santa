@@ -1,0 +1,66 @@
+{% extends 'events/event_view.html' %}
+{% load static %}
+
+{% block status %}
+    <h2>Results</h2>
+    {% for gift in gifts %}
+        {% if gift.emoji %}
+            <article class="gift-reveal-row mt-5 d-flex justify-content-around align-middle">
+
+                {% if gift.donor.profile_picture %}
+                    <img src="{{ gift.donor.profile_picture.url }}" alt="" class="img-thumbnail">
+                {% else %}
+                    <img src="{% static 'users/images/profile_placeholder.png' %}" alt="" class="card-img-top">
+                {% endif %}
+                <img src="{% static 'events/images/arrow.png' %}" alt="">
+                <img src="{{ gift.emoji.image.url }}" alt="" class="img-thumbnail">
+                <img src="{% static 'events/images/arrow.png' %}" alt="">
+                {% if gift.recipient.profile_picture %}
+                    <img src="{{ gift.recipient.profile_picture.url }}" alt="" class="img-thumbnail">
+                {% else %}
+                    <img src="{% static 'users/images/profile_placeholder.png' %}" alt="" class="card-img-top">
+                {% endif %}
+
+            </article>
+            <p class="mt-2">{{ gift.donor.display_name }} gave {{ gift.recipient.display_name }}
+                a {{ gift.emoji.name }}</p>
+            {% if gift.message %}
+                <p class="gift-message">Message: "{{ gift.message }}"</p>
+            {% else %}
+                <p class="gift-message">Message: "{{ gift.emoji.description }}"</p>
+            {% endif %}
+        {% else %}
+
+            <article class="gift-reveal-row mt-5 d-flex justify-content-around align-middle">
+                <img src="{% static 'events/images/coal.png' %}" alt="" class="img-thumbnail">
+                <img src="{% static 'events/images/arrow.png' %}" alt="">
+                {% if gift.recipient.profile_picture %}
+                    <img src="{{ gift.recipient.profile_picture.url }}" alt="" class="img-thumbnail">
+                {% else %}
+                    <img src="{% static 'users/images/profile_placeholder.png' %}" alt="" class="card-img-top">
+                {% endif %}
+            </article>
+            <p>{{ gift.recipient.display_name }} received coal!!</p>
+
+        {% endif %}
+
+    {% endfor %}
+    <h2 class="mt-5">Hall of Infamy</h2>
+    <section id="grinches">
+        {% for gift in gifts %}
+            {% if not gift.emoji %}
+                <div class="media mt-3">
+                    {% if gift.donor.profile_picture %}
+                        <img class="img-thumbnail" src="{{ gift.donor.profile_picture.url }}" alt="">
+                    {% else %}
+                        <img src="{% static 'users/images/profile_placeholder.png' %}" alt="" class="img-thumbnail">
+                    {% endif %}
+                    <h6 class="align-self-end ml-3">{{ gift.donor.display_name }}</h6>
+
+                </div>
+            {% endif %}
+        {% endfor %}
+    </section>
+
+
+{% endblock %}

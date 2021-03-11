@@ -1,0 +1,44 @@
+{% extends 'events/event_view.html' %}
+{% load static %}
+{% block status %}
+    <div class="status" id="pre-open">
+        <h4>Your present is ready for opening</h4>
+        <input type="button" id="open-present" value="Open" class="btn btn-primary mt-3 btn-lg">
+    </div>
+    <div class="status d-none" id="post-open">
+        <h4>You got...</h4>
+        {% if user_gift.emoji %}
+            <img src="{{ user_gift.emoji.image.url }}" alt="" class="img-thumbnail">
+            <h4>A {{ user_gift.emoji.name }}</h4>
+            <h5>Love From {{ user_gift.donor.display_name }}</h5>
+            <p class="gift-message">"
+                {% if user_gift.message %}
+                    {{user_gift.message}}
+                {% else %}
+                    {{user_gift.emoji.description}}
+                {% endif %}
+                "
+            </p>
+        {% else %}
+            <img src="{% static 'events/images/coal.png' %}" alt="" class="img-thumbnail">
+            <p>"You been a naughty child this year."</p>
+        {% endif %}
+        <p><a href=".">Reload</a> the page to see what everyone else got!</p>
+    </div>
+    <script>
+        let openButton = document.getElementById('open-present');
+        let preOpen = document.getElementById('pre-open');
+        let postOpen = document.getElementById('post-open');
+        openButton.addEventListener('click', openPresent)
+
+
+        function openPresent(e) {
+            e.preventDefault()
+
+            preOpen.classList.add('d-none');
+            postOpen.classList.remove('d-none')
+        }
+    </script>
+
+
+{% endblock %}

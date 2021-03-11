@@ -1,36 +1,28 @@
 {% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% block links %}
+<link rel="stylesheet" href="{% static 'users/css/login.css'  %}">
+{% endblock %}
 
 {% block content %}
 
-{% if form.errors %}
-<p>Please make sure fields are filled out correctly.</p>
-{% endif %}
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
+    <div id="heading-section" class="card p-2">
+        <h1>Secret Santa</h1>
+        <strong id="subtitle">Give the gift of joy this Christmas</strong>
+    </div>
+    <div class="row form-signin align-items-end">
 
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+        <form class="card p-4 col-sm" method="post" action="{% url 'login' %}">
+            <h3>Please Sign In</h3>
+            {% csrf_token %}
+            {{ form | crispy }}
 
-<input type="submit" value="login">
-<input type="hidden" name="next" value="{{ next }}">
-</form>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" value="login">Sign In</button>
+            <input type="hidden" name="next" value="{{ next }}">
+            <p class="mt-3 mb-3 text-muted">New User? <a href="{% url 'register' %}">sign up here!</a></p>
+        </form>
 
-<p>New User? <a href="{% url 'register' %}">sign up here!</a></p>
+    </div>
 {% endblock %}

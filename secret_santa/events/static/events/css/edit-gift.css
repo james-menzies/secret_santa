@@ -1,0 +1,14 @@
+.image-radio-option {
+    flex-basis: 30%;
+}
+
+
+#submit-id-submit {
+    width: 300px;
+}
+
+#recipient-view {
+    max-width: 300px;
+    text-align: center;
+}
+

@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.contrib import messages
+from django.contrib.messages import constants
+from django.contrib.messages.context_processors import messages
 from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
@@ -37,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'crispy_forms',
 
     'users',
     'core',
@@ -107,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Australia/Sydney'
 
 USE_I18N = True
 
@@ -118,5 +123,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+
 AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_URL = reverse_lazy('login')
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+MESSAGE_TAGS = {
+    constants.SUCCESS: 'alert alert-primary',
+    constants.ERROR: 'alert alert-danger',
+    constants.WARNING: 'alert alert-warning'
+}

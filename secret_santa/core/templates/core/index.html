@@ -1,9 +1,29 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'core/css/index.css' %}">
+{% endblock %}
+
 
 {% block content %}
-    <p>Welcome, {{ user.email }}. <a href="{% url 'logout' %}">Log out</a></p>
-    <h1>This is an updated landing page</h1>
-    <a href="{% url 'profile' %}">Click here to view profile</a>
-    <a href="{% url 'view_all_events' %}">View your events</a>
-    <a href="{% url 'create_event' %}">Create a new event</a>
+    <div class="card p-2">
+        <p>Welcome, {{ user.display_name }}. <a href="{% url 'logout' %}">Log out</a></p>
+        <h1>Welcome to Secret Santa!</h1>
+        <p>Click one of the options below to get started.</p>
+    </div>
+    <div class="card-container flex-row d-flex justify-content-around">
+        <div class="card border-primary col-md-3">
+            <img src="{% static 'core/images/profile.png' %}" alt="">
+            <a class="btn btn-primary stretched-link mb-2" href="{% url 'profile' %}">MY PROFILE</a>
+        </div>
+        <div class="card border-primary col-md-3">
+            <img src="{% static 'core/images/calendar.png' %}" alt="">
+            <a class="btn btn-primary stretched-link mb-2" href="{% url 'view_all_events' %}">MY EVENTS</a>
+        </div>
+        <div class="card border-primary col-md-3">
+            <img src="{% static 'core/images/add_event.png' %}" alt="">
+            <a class="btn btn-primary stretched-link mb-2" href="{% url 'create_event' %}">CREATE EVENT</a>
+        </div>
+    </div>
 {% endblock %}

@@ -1,7 +1,36 @@
 {% extends 'core/navbar_base.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'events/css/event_view.css' %}">
+{% endblock %}
 
 {% block content %}
 
-    <h1>Event View</h1>
-    <p>Viewing event no: {{ id }}</p>
+
+    <div class="row justify-content-around">
+        <article class="card col-md-4 mr-3 pt-3">
+            {% if event.image %}
+                <img src="{{ event.image.url }}" alt="" class="card-img-top">
+            {% else %}
+                <img src="{% static 'events/images/event_placeholder.png' %}" alt="">
+            {% endif %}
+            <h5 class="card-title pt-3">{{ event.name }}</h5>
+            <h6>Owner: {{ event.owner.display_name }}</h6>
+            {% if event.concluded_at %}
+            {% endif %}
+            <p class="pt-3">{{ event.description }}</p>
+            <h5 class="card-subtitle py-3">Participants:</h5>
+            <ul class="list-group list-group-flush">
+                {% for participant in event.participants.all %}
+                    <li class="list-group-item">{{ participant.display_name }}</li>
+                {% endfor %}
+            </ul>
+
+
+        </article>
+        <div class="status col-md-7 p-2 border">
+            {% block status %}{% endblock %}
+        </div>
+    </div>
 {% endblock %}

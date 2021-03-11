@@ -1,0 +1,17 @@
+.form-signin {
+    max-width: 400px;
+    margin: auto;
+}
+
+
+#heading-section h1 {
+    font-size: 6rem;
+}
+
+#heading-section {
+    margin: 0 auto 8rem 8rem;
+    display: inline-block;
+    text-align: right;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+

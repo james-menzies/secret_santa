@@ -1,4 +1,5 @@
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 
@@ -7,7 +8,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 
-from users.forms import UserRegistrationForm
+from users.forms import UserRegistrationForm, UserEditForm
 
 
 class CustomLoginView(LoginView):
@@ -22,9 +23,12 @@ def log_out(request):
     logout(request)
     return redirect(reverse('login'))
 
+@login_required
 def profile(request):
-
-    return render(request, template_name='users/profile.html')
+    context = {
+        "title": "My Profile"
+    }
+    return render(request, template_name='users/profile.html', context=context)
 
 
 def register(request):
@@ -38,7 +42,20 @@ def register(request):
 
             return redirect(reverse('login'))
         else:
-            return redirect('register')
+            return render(request, 'users/register.html', context={"form": form})
 
+@login_required
 def edit_profile(request):
-    return render(request, 'users/edit_profile.html')
+    if request.method == 'POST':
+        form = UserEditForm(data=request.POST, files=request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = UserEditForm(instance=request.user)
+        context = {
+            "form": form,
+            "title": "Edit Profile"
+                   }
+        return render(request, 'users/edit_profile.html', context=context)
+
