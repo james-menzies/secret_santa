@@ -12,3 +12,8 @@
     text-align: center;
 }
 
+#recipient-view img {
+    max-height: 250px;
+    max-width: 250px;
+    object-fit: cover;
+}
